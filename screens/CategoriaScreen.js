@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet,Button, ImageBackground, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, ImageBackground, Image } from 'react-native';
 
-export default function CategoriaScreen({ setScreen }) {
+export default function CategoriaScreen({ navigation }) {
   return (
     <ImageBackground
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
@@ -13,8 +13,8 @@ export default function CategoriaScreen({ setScreen }) {
         <Button
           title="Siguiente Screen"
           color="#03A9F4"
-          onPress={() => setScreen('lista presupuestos')}
-                        />
+          onPress={() => navigation.navigate('ListaPresupuestos')}
+        />
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Ingresos totales: $5,000</Text>
@@ -36,8 +36,11 @@ export default function CategoriaScreen({ setScreen }) {
           <Text style={styles.item}>• Inversiones: 24.1%</Text>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={setScreen}>
-          <Text style={styles.buttonText}>← Volver</Text>
+        <TouchableOpacity 
+          style={styles.button} 
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>← Volver al Home</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -120,4 +123,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-});
+}); //comentarios

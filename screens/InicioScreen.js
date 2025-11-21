@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Image, TouchableOpacity,ScrollView, Button} from 'react-native';
-
-export default function InicioScreen({setScreen}) {
+export default function InicioScreen({ navigation }) {
   return (
     <ImageBackground
       source={{
@@ -9,59 +8,59 @@ export default function InicioScreen({setScreen}) {
       }}
       style={styles.background}
     >
-      <ScrollView>  
+      <ScrollView>
+        <View style={styles.overlay}>
+          <View style={styles.container}>
 
-      <View style={styles.overlay}>
-        <View style={styles.container}>
+            <Image 
+              source={require('../assets/user.png')} 
+              style={styles.logo} 
+            />
 
-          <Image 
-            source={require('../assets/user.png')} 
-            style={styles.logo} 
-          />
+            <Text style={styles.title}>Bienvenido a Ahorra+App</Text>
+            <Text style={styles.subtitle}>
+              Tu asistente personal para administrar tus gastos, establecer metas 
+              y lograr tus objetivos financieros.
+            </Text>
 
-          <Text style={styles.title}>Bienvenido a Ahorra+App</Text>
-          <Text style={styles.subtitle}>
-            Tu asistente personal para administrar tus gastos, establecer metas 
-            y lograr tus objetivos financieros.
-          </Text>
+            <View style={styles.menu}>
+              <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
+                <Text style={styles.menuTitle}>Gráficas</Text>
+                <Text style={styles.menuDesc}>Analiza tus gastos mensuales</Text>
+              </TouchableOpacity>
 
-          <Button
-                title="Siguiente Screen"
-                color="#03A9F4"
-                onPress={() => setScreen('validar credenciales')}
-              />
+              <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
+                <Text style={styles.menuTitle}>Presupuestos</Text>
+                <Text style={styles.menuDesc}>Organiza tus gastos por categoría</Text>
+              </TouchableOpacity>
 
-          <View style={styles.menu}>
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
-              <Text style={styles.menuTitle}>Gráficas</Text>
-              <Text style={styles.menuDesc}>Analiza tus gastos mensuales</Text>
+              <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
+                <Text style={styles.menuTitle}>Metas de Ahorro</Text>
+                <Text style={styles.menuDesc}>Establece objetivos financieros</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
+                <Text style={styles.menuTitle}>Actividad</Text>
+                <Text style={styles.menuDesc}>Consulta tu historial de movimientos</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* ⭐ BOTÓN COMENZAR QUE TE LLEVA A HOME ⭐ */}
+            <TouchableOpacity
+              style={styles.startButton}
+              activeOpacity={0.8}
+              onPress={() => navigation.navigate('Home')}
+            >
+              <Text style={styles.startText}>Comenzar →</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
-              <Text style={styles.menuTitle}>Presupuestos</Text>
-              <Text style={styles.menuDesc}>Organiza tus gastos por categoría</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
-              <Text style={styles.menuTitle}>Metas de Ahorro</Text>
-              <Text style={styles.menuDesc}>Establece objetivos financieros</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.8}>
-              <Text style={styles.menuTitle}>Actividad</Text>
-              <Text style={styles.menuDesc}>Consulta tu historial de movimientos</Text>
-            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity style={styles.startButton} activeOpacity={0.8}>
-            <Text style={styles.startText}>Comenzar →</Text>
-          </TouchableOpacity>
         </View>
-      </View>
       </ScrollView>
     </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
   background: {
