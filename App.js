@@ -1,14 +1,25 @@
-//1. import: zona de importaciones
-import MenuScreen from './screens/MenuScreen';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-//2. main: zona de componentes 
+import InicioSesionScreen from './screens/InicioScreen';
+import Home from './screens/HomeScreen';
+
+const Stack = createNativeStackNavigator();
+
 export default function App() {
-
-  
   return (
-    <MenuScreen></MenuScreen>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='InicioScreen'>
+        <Stack.Screen
+          name="InicioScreen"
+          component={InicioSesionScreen}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-   
 }
-
-
