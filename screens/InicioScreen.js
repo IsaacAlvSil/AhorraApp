@@ -44,8 +44,12 @@ export default function InicioScreen({ navigation }) {
                 <Text style={styles.menuDesc}>Consulta tu historial de movimientos</Text>
               </TouchableOpacity>
             </View>
+<<<<<<< HEAD
 
             {/* ⭐ BOTÓN COMENZAR QUE TE LLEVA A HOME ⭐ */}
+=======
+            
+>>>>>>> 92b58516ec2db3e68ffa55f385cb5844d561f037
             <TouchableOpacity
               style={styles.startButton}
               activeOpacity={0.8}

@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< HEAD
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
@@ -69,3 +70,14 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+=======
+import { View, Text } from 'react-native';
+
+export default function HomeScreen() {
+  return (
+    <View style={{ flex:1, justifyContent:'center', alignItems:'center' }}>
+      <Text style={{ fontSize:22 }}>Homeee</Text>
+    </View>
+  );
+}
+>>>>>>> 92b58516ec2db3e68ffa55f385cb5844d561f037
