@@ -1,3 +1,4 @@
+//pagina principal
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet, Alert,Button } from 'react-native';
 import logo from '../assets/lAhorra-logo.jpg';
@@ -6,7 +7,7 @@ export default function InicioSesionScreen({setScreen}) {
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
 
-  const handleAcceder = () => {
+  const handleAcceder = () => { 
     if ( correo.trim() === '' || contrasena.trim() === '') {
       alert('Error Por favor llena todos los campos');
       Alert.alert('Error, Por favor llena todos los campos');
