@@ -11,6 +11,7 @@ import ListaPresupuestos from './ListaPresupuestos';
 import PresupuestosScreen from './PresupuestosScreen';
 import ValidacionCredencialesScreen from './ValidacionCredencialesScreen';
 import InicioScreen from './InicioScreen';
+import Registro from './Registro';
 
 export default function MenuScreen() {
   const [screen, setScreen] = useState('menu');
@@ -49,6 +50,9 @@ export default function MenuScreen() {
 
     case 'inicio':
       return <InicioScreen setScreen={setScreen}/>;
+    
+    case 'registro':
+      return <Registro setScreen={setScreen}/>;
 
     default:
       return (
@@ -84,6 +88,7 @@ export default function MenuScreen() {
                 <Button color="#03A9F4" onPress={() => setScreen('categoria')} title="Categoría"/>
                 <Button color="#03A9F4" onPress={() => setScreen('lista presupuestos')} title="Lista Presupuestos"/>
                 <Button color="#03A9F4" onPress={() => setScreen('presupuestos')} title="Presupuestos"/>
+                <Button color="#03A9F4" onPress={() => setScreen('registro')} title="Registro"/>
               </View>
             </ScrollView>
           </View>
