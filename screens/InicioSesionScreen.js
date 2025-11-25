@@ -1,47 +1,50 @@
-//pagina principal
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet, Alert,Button } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet, Alert } from 'react-native';
 import logo from '../assets/lAhorra-logo.jpg';
+import { db } from '../db';
 
-ex
-export default function InicioSesionScreen({navigation}) {
+export default function InicioSesionScreen({ navigation }) {
+
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
 
-  const handleAcceder = () => { 
-    if ( correo.trim() === '' || contrasena.trim() === '') {
-      alert('Error Por favor llena todos los campos');
-      Alert.alert('Error, Por favor llena todos los campos');
-    } else {
-      navigation.navigate('Home');
-    }
-  };
+  const handleAcceder = () => {
 
-  const handleRegistrar = () => {
-    Alert.alert('Registro', 'Redirigiendo a registro...');
+    if (correo.trim() === '' || contrasena.trim() === '') {
+      alert('Error: llena todos los campos');
+      Alert.alert('Error', 'Por favor llena todos los campos');
+      return;
+    }
+
+    db.transaction(tx => {
+      tx.executeSql(
+        "SELECT * FROM users WHERE email = ? AND password = ?",
+        [correo, contrasena],
+        (_, result) => {
+
+          if (result.rows.length > 0) {
+            Alert.alert("Bienvenido", "Inicio de sesión exitoso");
+            navigation.navigate('Home');
+          } else {
+            Alert.alert("Error", "Correo o contraseña incorrectos");
+          }
+        },
+        () => {
+          Alert.alert("Error", "No se pudo iniciar sesión");
+        }
+      );
+    });
   };
 
   return (
- <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
         source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
         style={styles.background}
       >
         <View style={styles.container}>
 
-
-         {/* Botón para ir a la siguiente screen */}
-        <Button
-          title="Siguiente Screen"
-          color="#03A9F4"
-          onPress={() => setScreen('inicio')}
-        />
-
-        
-          <Image
-           source={logo}
-           style={styles.logo}
-         />
+          <Image source={logo} style={styles.logo} />
 
           <TextInput
             style={styles.input}
@@ -51,6 +54,7 @@ export default function InicioSesionScreen({navigation}) {
             onChangeText={setCorreo}
             keyboardType="email-address"
           />
+
           <TextInput
             style={styles.input}
             placeholder="Ingresar contraseña"
@@ -59,30 +63,30 @@ export default function InicioSesionScreen({navigation}) {
             onChangeText={setContrasena}
             secureTextEntry
           />
-          
+
           <TouchableOpacity>
             <Text style={styles.linkText}>¿Olvidaste la contraseña?</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-          style={styles.button}
-           onPress={handleAcceder}
-           activeOpacity={0.2}
-           >
-            
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleAcceder}
+            activeOpacity={0.2}
+          >
             <Text style={styles.buttonText}>ACCEDER</Text>
           </TouchableOpacity>
-          
+
           <Text style={styles.textoCuenta}>¿Aún no tienes cuenta?</Text>
-          <TouchableOpacity onPress={handleRegistrar}>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Registro')}>
             <Text style={styles.registrar}>REGISTRARSE</Text>
           </TouchableOpacity>
+
         </View>
       </ImageBackground>
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   background: {

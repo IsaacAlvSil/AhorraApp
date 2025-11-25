@@ -3,10 +3,14 @@ import { View, Text, TextInput, StyleSheet, ImageBackground, TouchableOpacity, A
 import { db } from '../db';
 
 export default function Registro({ navigation }) {
+
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+ 
   const handleRegister = () => {
+
     if (!email || !password) {
       Alert.alert("Error", "Llena todos los campos");
       return;
@@ -18,9 +22,10 @@ export default function Registro({ navigation }) {
         [email, password],
         () => {
           Alert.alert("Éxito", "Cuenta creada correctamente");
-          navigation.navigate('Login');
+          navigation.navigate('InicioSesionScreen');
         },
         (txObj, error) => {
+          
           if (error.message.includes("UNIQUE constraint failed")) {
             Alert.alert("Error", "Este correo ya está registrado");
           } else {
