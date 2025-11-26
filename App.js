@@ -7,11 +7,13 @@ import InicioSesionScreen from './screens/InicioSesionScreen';
 import Registro from './screens/Registro';
 import HomeScreen from './screens/HomeScreen';
 import CategoriaScreen from './screens/CategoriaScreen';
+
 import { initDB } from './db';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
   React.useEffect(() => {
     initDB()
       .then(() => console.log("Base de datos lista"))
