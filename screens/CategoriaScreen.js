@@ -4,10 +4,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Button, ImageBackground, Imag
 export default function CategoriaScreen({ navigation }) {
   return (
     <ImageBackground
+ 
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
       style={styles.background}
     >
       <View style={styles.container}>
+
         <Text style={styles.title}>Gráfica por Categoría</Text>
 
         <Button
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
+
   title: {
     fontSize: 26,
     fontWeight: 'bold',
@@ -66,6 +69,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: 'center',
   },
+
   card: {
     width: '90%',
     backgroundColor: 'rgba(255,255,255,0.2)',
@@ -83,6 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#e0e0e0',
   },
+
   graficaPlaceholder: {
     width: '90%',
     height: 220,
@@ -98,6 +103,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 25,
   },
+
   lista: {
     width: '90%',
     backgroundColor: 'rgba(255,255,255,0.2)',
@@ -110,6 +116,8 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 10,
   },
+
+
   button: {
     backgroundColor: '#4c7c3f',
     paddingVertical: 15,
@@ -123,4 +131,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-}); //comentarios
+});
