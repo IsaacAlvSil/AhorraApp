@@ -1,7 +1,7 @@
 import React from 'react';
-import {View,Text,StyleSheet,ImageBackground,Button,TouchableOpacity,ActivityIndicator,} from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, Button, TouchableOpacity, ActivityIndicator} from 'react-native';
 
-export default function ValidacionCredencialesScreen({ setScreen }) {
+export default function ValidacionCredencialesScreen({ navigation }) {
   return (
     <ImageBackground
       source={{
@@ -10,14 +10,13 @@ export default function ValidacionCredencialesScreen({ setScreen }) {
       style={styles.background}
     >
       <View style={styles.container}>
-      
 
         <Text style={styles.title}>Validación de Credenciales</Text>
 
         <Button
-        title="Siguiente Screen"
-        color="#03A9F4"
-        onPress={() => setScreen('transacciones')}
+          title="Siguiente Screen"
+          color="#03A9F4"
+          onPress={() => navigation.navigate('Transacciones')}
         />
 
         <View style={styles.card}>
@@ -39,6 +38,7 @@ export default function ValidacionCredencialesScreen({ setScreen }) {
         >
           <Text style={styles.buttonText}>← Volver al Menú</Text>
         </TouchableOpacity>
+
       </View>
     </ImageBackground>
   );
@@ -106,3 +106,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
