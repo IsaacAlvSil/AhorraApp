@@ -1,13 +1,11 @@
 import React from 'react';
-<<<<<<< HEAD
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Bienvenido a Home </Text>
-      
-      {/* Único botón para Categorías */}
+      <Text style={styles.title}>Bienvenido a Home</Text>
+
       <TouchableOpacity 
         style={styles.menuItem}
         onPress={() => navigation.navigate('Categoria')}
@@ -15,7 +13,6 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.menuText}>Ver Gráficas por Categoría</Text>
       </TouchableOpacity>
 
-      {/* Botón para volver al inicio */}
       <TouchableOpacity 
         style={styles.backButton}
         onPress={() => navigation.goBack()}
@@ -49,11 +46,6 @@ const styles = StyleSheet.create({
     width: '90%',
     alignItems: 'center',
     marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
   },
   menuText: {
     color: 'white',
@@ -70,14 +62,3 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
-=======
-import { View, Text } from 'react-native';
-
-export default function HomeScreen() {
-  return (
-    <View style={{ flex:1, justifyContent:'center', alignItems:'center' }}>
-      <Text style={{ fontSize:22 }}>Homeee</Text>
-    </View>
-  );
-}
->>>>>>> 92b58516ec2db3e68ffa55f385cb5844d561f037

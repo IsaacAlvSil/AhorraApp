@@ -21,7 +21,6 @@ export default function InicioSesionScreen({ navigation }) {
         "SELECT * FROM users WHERE email = ? AND password = ?",
         [correo, contrasena],
         (_, result) => {
-
           if (result.rows.length > 0) {
             Alert.alert("Bienvenido", "Inicio de sesión exitoso");
             navigation.navigate('Home');
