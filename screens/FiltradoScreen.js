@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity,Button, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground } from 'react-native';
 
-export default function FiltradoScreen({ setScreen }) {
+export default function FiltradoScreen({ navigation, setScreen }) {
   return (
     <ImageBackground
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
@@ -11,11 +11,10 @@ export default function FiltradoScreen({ setScreen }) {
         <Text style={styles.title}>Gráficas y Filtrado</Text>
 
         <Button
-                title="Siguiente Screen"
-                color="#03A9F4"
-                onPress={() => setScreen('categoria')}
-                />
-        
+          title="Siguiente Screen"
+          color="#03A9F4"
+          onPress={() => setScreen('categoria')}
+        />
 
         <TouchableOpacity 
           style={styles.menuItem}
@@ -41,7 +40,10 @@ export default function FiltradoScreen({ setScreen }) {
           <Text style={styles.menuDescription}>Filtrar por criterios</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+        <TouchableOpacity 
+          style={styles.button} 
+          onPress={() => navigation.goBack()}
+        >
           <Text style={styles.buttonText}>← Volver al Menú Principal</Text>
         </TouchableOpacity>
       </View>
