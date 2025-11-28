@@ -2,6 +2,28 @@ import React from "react";
 import { View, Text, FlatList, StyleSheet, Button, ImageBackground, TouchableOpacity } from "react-native";
 
 export default function TransaccionesScreen({ navigation }) {
+<<<<<<< HEAD
+  const transacciones = [
+    { id: "1", tipo: "Depósito", monto: "+$1,200.00", fecha: "01/11/2025" },
+    { id: "2", tipo: "Retiro", monto: "-$350.00", fecha: "02/11/2025" },
+  ];
+  return (
+    <ImageBackground source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s" }} style={styles.background}>
+      <View style={styles.container}>
+        <Text style={styles.titulo}>Historial</Text>
+        <Button title="Nueva transacción" color="#03A9F4" onPress={() => navigation.navigate("NuevaTransaccion")} />
+        <FlatList
+            data={transacciones}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+                <View style={styles.item}>
+                    <Text style={styles.tipo}>{item.tipo}</Text>
+                    <Text style={styles.monto}>{item.monto}</Text>
+                </View>
+            )}
+            style={styles.lista}
+        />
+=======
 
   const transacciones = [
     { id: "1", tipo: "Depósito", monto: "+$1,200.00", fecha: "01/11/2025" },
@@ -60,10 +82,22 @@ export default function TransaccionesScreen({ navigation }) {
           <Text style={styles.backText}>← Volver</Text>
         </TouchableOpacity>
 
+>>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220
       </View>
     </ImageBackground>
   );
 }
+<<<<<<< HEAD
+const styles = StyleSheet.create({
+  background: { flex: 1, resizeMode: "cover" },
+  container: { flex: 1, alignItems: "center", padding: 20, paddingTop: 60 },
+  titulo: { fontSize: 26, fontWeight: "bold", color: "#fff", marginBottom: 25 },
+  lista: { width: "100%", marginTop: 20 },
+  item: { flexDirection: "row", justifyContent: "space-between", backgroundColor: "rgba(255,255,255,0.25)", padding: 15, borderRadius: 20, marginBottom: 10 },
+  tipo: { color: "#fff", fontWeight: "bold" },
+  monto: { color: "#fff" },
+});
+=======
 
 const styles = StyleSheet.create({
   background: {
@@ -126,3 +160,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+>>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220

@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+import React from "react";
+import { Text, View, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
+=======
 import React, { useState } from 'react';
 import {Text, View, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Button,} from 'react-native';
 
@@ -7,8 +11,17 @@ export default function DetallesTransaccionScreen({ navigation }) {
   const [destinatario, setDestinatario] = useState("");
   const [descripcion, setDescripcion] = useState("Pago de servicios");
   const [editando, setEditando] = useState(false);
+>>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220
 
+export default function DetallesTransaccionScreen({navigation}) {
   return (
+<<<<<<< HEAD
+    <ImageBackground source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s" }} style={styles.background}>
+      <View style={styles.container}>
+        <Text style={styles.titulo}>Detalles</Text>
+        <TouchableOpacity style={styles.buttonSecondary} onPress={() => navigation.goBack()}>
+          <Text style={styles.buttonText}>Volver</Text>
+=======
     <ImageBackground
       source={{
         uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s'
@@ -73,14 +86,22 @@ export default function DetallesTransaccionScreen({ navigation }) {
           onPress={() => navigation.goBack()}
         >
           <Text style={styles.buttonText}>← Volver al menú</Text>
+>>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220
         </TouchableOpacity>
 
       </View>
     </ImageBackground>
   );
 }
-
 const styles = StyleSheet.create({
+<<<<<<< HEAD
+  background: { flex: 1, resizeMode: "cover", justifyContent: "center" },
+  container: { flex: 1, alignItems: "center", justifyContent: 'center' },
+  titulo: { fontSize: 26, fontWeight: "bold", color: "#fff", marginBottom: 30 },
+  buttonSecondary: { backgroundColor: "#1c3879", padding: 15, width: "90%", borderRadius: 25, alignItems: "center" },
+  buttonText: { color: "#fff", fontWeight: "bold" },
+});
+=======
   background: {
     flex: 1,
     resizeMode: 'cover',
@@ -148,3 +169,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+>>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220

@@ -4,6 +4,21 @@ import { View, Text, StyleSheet, ImageBackground, Image, TouchableOpacity, Scrol
 export default function PantallaBienvenida({ navigation }) {
   return (
     <ImageBackground
+<<<<<<< HEAD
+      source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
+      style={styles.background}
+    >
+      <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+        <View style={styles.overlay}>
+          <View style={styles.container}>
+            {/* Si no tienes la imagen, comenta la linea de abajo */}
+            <Image source={require('../assets/user.png')} style={styles.logo} /> 
+            <Text style={styles.title}>Bienvenido a Ahorra+App</Text>
+            <Text style={styles.subtitle}>Tu asistente personal para administrar tus gastos.</Text>
+            <TouchableOpacity style={styles.startButton} onPress={() => navigation.navigate('Login')}>
+              <Text style={styles.startText}>Comenzar →</Text>
+            </TouchableOpacity>
+=======
       source={{
         uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s',
       }}
@@ -32,12 +47,26 @@ export default function PantallaBienvenida({ navigation }) {
               <Text style={styles.startText}>Comenzar →</Text>
             </TouchableOpacity>
 
+>>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220
           </View>
         </View>
       </ScrollView>
     </ImageBackground>
   );
 }
+<<<<<<< HEAD
+// Usa tus estilos originales
+const styles = StyleSheet.create({
+  background: { flex: 1, resizeMode: 'cover' },
+  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
+  container: { width: '90%', backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 25, padding: 25, alignItems: 'center' },
+  logo: { width: 100, height: 100, marginBottom: 20, borderRadius: 50 },
+  title: { fontSize: 26, fontWeight: 'bold', color: '#fff', textAlign: 'center', marginBottom: 10 },
+  subtitle: { color: '#e0e0e0', textAlign: 'center', fontSize: 15, marginBottom: 30 },
+  startButton: { backgroundColor: '#4CAF50', borderRadius: 25, paddingVertical: 15, width: '80%', alignItems: 'center', marginTop: 25 },
+  startText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+});
+=======
 
 const styles = StyleSheet.create({
   background: {
@@ -90,3 +119,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+>>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220
