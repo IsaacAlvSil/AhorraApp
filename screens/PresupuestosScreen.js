@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {Text, StyleSheet, View, Alert, TextInput, Button, TouchableOpacity, ImageBackground,} from 'react-native';
+import {Text,StyleSheet,View,Alert,TextInput,Button,TouchableOpacity,ImageBackground,} from 'react-native';
 
-export default function PresupuestosScreen({ navigation }) {
+export default function PresupuestosScreen({setScreen}) {
   const [monto, setMonto] = useState('');
   const [categoria, setCategoria] = useState('');
 
@@ -20,20 +20,17 @@ export default function PresupuestosScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={{
-        uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s',
-      }}
+      source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
       style={styles.background}
     >
       <View style={styles.container}>
         <Text style={styles.titulo}>Presupuestos</Text>
 
-        {/* Volver usando navegación */}
         <Button
-          title="Volver al menú"
-          color="#03A9F4"
-          onPress={() => navigation.navigate('Menu')}
-        />
+                title="Volver a menu"
+                color="#03A9F4"
+                onPress={() => setScreen('menu')}
+                />
 
         <View style={styles.cajaPresupuesto}>
           <Text style={styles.textoIntro}>Establece tu presupuesto mensual</Text>
