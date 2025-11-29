@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-import { Text, StyleSheet, View, Button, ImageBackground, ScrollView } from 'react-native';
-
-export default function MenuScreen({ navigation }) {
-  return (
-    <ImageBackground source={require('../assets/fondo.jpeg')} style={styles.fondo}>
-      <View style={styles.overlay}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.text}>Menú de Opciones</Text>
-          <View style={styles.botonesContainer}>
-            <Button color="#03A9F4" onPress={() => navigation.navigate('Transacciones')} title="Transacciones" />
-            <Button color="#03A9F4" onPress={() => navigation.navigate('NuevaTransaccion')} title="Nueva Transacción" />
-            <Button color="#03A9F4" onPress={() => navigation.navigate('Graficas')} title="Gráficas" />
-            <Button color="#03A9F4" onPress={() => navigation.navigate('Presupuestos')} title="Presupuestos" />
-            <Button color="red" onPress={() => navigation.navigate('Login')} title="Cerrar Sesión" />
-=======
 import { Text, StyleSheet, View, Button, Image, ImageBackground, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import TransaccionesScreen from './Transacciones';
@@ -28,7 +11,6 @@ import ListaPresupuestos from './ListaPresupuestos';
 import PresupuestosScreen from './PresupuestosScreen';
 import ValidacionCredencialesScreen from './ValidacionCredencialesScreen';
 import InicioScreen from './InicioScreen';
-import Registro from './Registro';
 
 export default function MenuScreen() {
   const [screen, setScreen] = useState('menu');
@@ -67,9 +49,6 @@ export default function MenuScreen() {
 
     case 'inicio':
       return <InicioScreen setScreen={setScreen}/>;
-    
-    case 'registro':
-      return <Registro setScreen={setScreen}/>;
 
     default:
       return (
@@ -105,20 +84,50 @@ export default function MenuScreen() {
                 <Button color="#03A9F4" onPress={() => setScreen('categoria')} title="Categoría"/>
                 <Button color="#03A9F4" onPress={() => setScreen('lista presupuestos')} title="Lista Presupuestos"/>
                 <Button color="#03A9F4" onPress={() => setScreen('presupuestos')} title="Presupuestos"/>
-                <Button color="#03A9F4" onPress={() => setScreen('registro')} title="Registro"/>
               </View>
             </ScrollView>
->>>>>>> aee6b215b9806ffec8dbdd90d451adc89c422220
           </View>
-        </ScrollView>
-      </View>
-    </ImageBackground>
-  );
+        </ImageBackground>
+      );
+  }
 }
+
 const styles = StyleSheet.create({
-  fondo: { flex: 1, resizeMode: 'cover' },
-  overlay: { flex: 1, backgroundColor: 'rgba(21, 41, 124, 0.7)', justifyContent: 'center' },
-  scrollContainer: { alignItems: 'center', padding: 20 },
-  text: { color: 'white', fontSize: 20, fontWeight: 'bold', marginBottom: 25 },
-  botonesContainer: { width: '100%', gap: 10 },
+  fondo: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(21, 41, 124, 0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  scrollContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 50,
+  },
+  logoContainer: {
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginBottom: 1,
+  marginTop: 2,
+  width: '100%',
+},
+
+  logo: {
+    width: 350,
+    height: 350,
+  },
+  text: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 25,
+  },
+  botonesContainer: {
+    width: '90%',
+    gap: 10,
+  },
 });
