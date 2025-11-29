@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet,Button, ImageBackground, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Button, ImageBackground, Image } from 'react-native';
 
 export default function CategoriaScreen({ setScreen }) {
   return (
@@ -14,7 +14,7 @@ export default function CategoriaScreen({ setScreen }) {
           title="Siguiente Screen"
           color="#03A9F4"
           onPress={() => setScreen('lista presupuestos')}
-                        />
+        />
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Ingresos totales: $5,000</Text>
@@ -36,7 +36,7 @@ export default function CategoriaScreen({ setScreen }) {
           <Text style={styles.item}>• Inversiones: 24.1%</Text>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={setScreen}>
+        <TouchableOpacity style={styles.button} onPress={() => setScreen('filtrado')}>
           <Text style={styles.buttonText}>← Volver</Text>
         </TouchableOpacity>
       </View>

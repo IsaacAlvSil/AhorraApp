@@ -1,5 +1,13 @@
 import React from 'react';
-import {View,Text,StyleSheet,ImageBackground,Button,TouchableOpacity,ActivityIndicator,} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  Button,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 
 export default function ValidacionCredencialesScreen({ setScreen }) {
   return (
@@ -10,14 +18,12 @@ export default function ValidacionCredencialesScreen({ setScreen }) {
       style={styles.background}
     >
       <View style={styles.container}>
-      
-
         <Text style={styles.title}>Validación de Credenciales</Text>
 
         <Button
-        title="Siguiente Screen"
-        color="#03A9F4"
-        onPress={() => setScreen('transacciones')}
+          title="Siguiente Screen"
+          color="#03A9F4"
+          onPress={() => setScreen('transacciones')}
         />
 
         <View style={styles.card}>
@@ -35,7 +41,7 @@ export default function ValidacionCredencialesScreen({ setScreen }) {
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
-          onPress={() => navigation.goBack()}
+          onPress={() => setScreen('menu')}
         >
           <Text style={styles.buttonText}>← Volver al Menú</Text>
         </TouchableOpacity>

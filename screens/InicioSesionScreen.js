@@ -1,46 +1,40 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet, Alert,Button } from 'react-native';
-import logo from '../assets/lAhorra-logo.jpg';
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet, Alert, Button } from 'react-native';
 
-export default function InicioSesionScreen({setScreen}) {
+export default function InicioSesionScreen({ setScreen }) {
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
 
   const handleAcceder = () => {
-    if ( correo.trim() === '' || contrasena.trim() === '') {
-      alert('Error Por favor llena todos los campos');
-      Alert.alert('Error, Por favor llena todos los campos');
+    if (correo.trim() === '' || contrasena.trim() === '') {
+      Alert.alert('Error', 'Por favor llena todos los campos');
     } else {
-      Alert.alert(` Bienvenido, Has iniciado sesión como: ${correo}, y con contraseña: ${contrasena}`);
-      alert(` Bienvenido, Has iniciado sesión como: ${correo}, y con contraseña: ${contrasena}`);
+      Alert.alert('Éxito', `Bienvenido, Has iniciado sesión como: ${correo}`);
+      setScreen('inicio');
     }
   };
 
   const handleRegistrar = () => {
-    Alert.alert('Registro', 'Redirigiendo a registro...');
+    setScreen('registro');
   };
 
   return (
- <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ImageBackground
         source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
         style={styles.background}
       >
         <View style={styles.container}>
+          <Button
+            title="Siguiente Screen"
+            color="#03A9F4"
+            onPress={() => setScreen('inicio')}
+          />
 
-
-         {/* Botón para ir a la siguiente screen */}
-        <Button
-          title="Siguiente Screen"
-          color="#03A9F4"
-          onPress={() => setScreen('inicio')}
-        />
-
-        
           <Image
-           source={logo}
-           style={styles.logo}
-         />
+            source={require('../assets/lAhorra-logo.jpg')}
+            style={styles.logo}
+          />
 
           <TextInput
             style={styles.input}
@@ -58,20 +52,19 @@ export default function InicioSesionScreen({setScreen}) {
             onChangeText={setContrasena}
             secureTextEntry
           />
-          
-          <TouchableOpacity>
+
+          <TouchableOpacity onPress={() => console.log('Recuperar contraseña')}>
             <Text style={styles.linkText}>¿Olvidaste la contraseña?</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity 
-          style={styles.button}
-           onPress={handleAcceder}
-           activeOpacity={0.2}
-           >
-            
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleAcceder}
+            activeOpacity={0.2}
+          >
             <Text style={styles.buttonText}>ACCEDER</Text>
           </TouchableOpacity>
-          
+
           <Text style={styles.textoCuenta}>¿Aún no tienes cuenta?</Text>
           <TouchableOpacity onPress={handleRegistrar}>
             <Text style={styles.registrar}>REGISTRARSE</Text>
@@ -81,7 +74,6 @@ export default function InicioSesionScreen({setScreen}) {
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   background: {

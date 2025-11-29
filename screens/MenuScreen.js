@@ -11,11 +11,28 @@ import ListaPresupuestos from './ListaPresupuestos';
 import PresupuestosScreen from './PresupuestosScreen';
 import ValidacionCredencialesScreen from './ValidacionCredencialesScreen';
 import InicioScreen from './InicioScreen';
+import PantallaBienvenida from './PantallaBienvenida';
+import RegistroScreen from './RegistroScreen';
 
 export default function MenuScreen() {
-  const [screen, setScreen] = useState('menu');
+  const [screen, setScreen] = useState('bienvenida'); // Cambiado a 'bienvenida' como pantalla inicial
 
   switch (screen) {
+    case 'bienvenida':
+      return <PantallaBienvenida setScreen={setScreen} />;
+
+    case 'registro':
+      return <RegistroScreen setScreen={setScreen} />;
+
+    case 'inicio sesion':
+      return <InicioSesionScreen setScreen={setScreen} />;
+
+    case 'inicio':
+      return <InicioScreen setScreen={setScreen}/>;
+
+    case 'validar credenciales':
+      return <ValidacionCredencialesScreen setScreen={setScreen}/>;
+
     case 'transacciones':
       return <TransaccionesScreen setScreen={setScreen} />;
 
@@ -34,21 +51,11 @@ export default function MenuScreen() {
     case 'categoria':
       return <CategoriaScreen setScreen={setScreen} />;
 
-    case 'inicio sesion':
-      return <InicioSesionScreen setScreen={setScreen} />;
-
-
     case 'lista presupuestos':
       return <ListaPresupuestos setScreen={setScreen} />;
 
     case 'presupuestos':
       return <PresupuestosScreen setScreen={setScreen}/>;
-
-    case 'validar credenciales':
-      return <ValidacionCredencialesScreen setScreen={setScreen}/>;
-
-    case 'inicio':
-      return <InicioScreen setScreen={setScreen}/>;
 
     default:
       return (
@@ -73,6 +80,8 @@ export default function MenuScreen() {
               showsVerticalScrollIndicator={true}
             >
               <View style={styles.botonesContainer}>
+                <Button color="#03A9F4" onPress={() => setScreen('bienvenida')} title="Pantalla Bienvenida"/>
+                <Button color="#03A9F4" onPress={() => setScreen('registro')} title="Registro"/>
                 <Button color="#03A9F4" onPress={() => setScreen('inicio sesion')} title="Inicio Sesión"/>
                 <Button color="#03A9F4" onPress={() => setScreen('inicio')} title="Inicio"/>
                 <Button color="#03A9F4" onPress={() => setScreen('validar credenciales')} title="Validar Credenciales"/>

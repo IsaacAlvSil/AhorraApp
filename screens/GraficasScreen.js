@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity,Button, StyleSheet, ImageBackground, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground, Image } from 'react-native';
 
 export default function GraficasScreen({ setScreen }) {
   return (
@@ -14,14 +14,13 @@ export default function GraficasScreen({ setScreen }) {
           title="Siguiente Screen"
           color="#03A9F4"
           onPress={() => setScreen('filtrado')}
-                      />
+        />
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Ingresos totales: $5,000</Text>
           <Text style={styles.cardSubtitle}>Gastos del mes: $3,200</Text>
         </View>
 
-        {/* 📊 Aquí reemplazamos el ícono por tu imagen local */}
         <View style={styles.graficaPlaceholder}>
           <Image
             source={require('../assets/g1.jpeg')}
@@ -36,7 +35,7 @@ export default function GraficasScreen({ setScreen }) {
           <Text style={styles.estadistica}>Promedio mensual: $3,200</Text>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={setScreen}>
+        <TouchableOpacity style={styles.button} onPress={() => setScreen('filtrado')}>
           <Text style={styles.buttonText}>← Volver</Text>
         </TouchableOpacity>
       </View>
