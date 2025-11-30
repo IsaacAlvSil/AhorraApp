@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground, Image,ScrollView} from 'react-native';
 
 export default function GraficasScreen({ navigation }) {
   return (
@@ -7,11 +7,12 @@ export default function GraficasScreen({ navigation }) {
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
       style={styles.background}
     >
+      <ScrollView>
       <View style={styles.container}>
         <Text style={styles.title}>Gráfica por Mes</Text>
 
         <Button
-          title="Siguiente Screen (Ir a Filtros)"
+          title="Ver mas"
           color="#03A9F4"
           onPress={() => navigation.navigate('FiltradoScreen')} 
         />
@@ -39,9 +40,10 @@ export default function GraficasScreen({ navigation }) {
             style={styles.button} 
             onPress={() => navigation.goBack()}
         >
-          <Text style={styles.buttonText}>← Volver</Text>
+          <Text style={styles.buttonText}>Volver</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </ImageBackground>
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground } from 'react-native';
 
-export default function FiltradoScreen({ setScreen }) {
+export default function FiltradoScreen({ navigation }) {
   return (
     <ImageBackground
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}

@@ -19,13 +19,6 @@ export default function InicioScreen({ navigation }) {
           </View>
 
           <Text style={styles.titulo}>Inicio</Text>
-          
-          <Button
-            title="Siguiente Screen"
-            color="#03A9F4"
-            onPress={() => navigation.navigate('ValidarCredenciales')} 
-          />
-
           <View style={styles.card}>
             <Text style={styles.cardTitulo}>Tu Saldo Actual</Text>
             <Text style={styles.saldo}>$14,892.50</Text>
@@ -34,9 +27,9 @@ export default function InicioScreen({ navigation }) {
 
           <View style={styles.card}>
             <Text style={styles.cardTitulo}>Metas de Ahorro</Text>
-            <Text style={styles.meta}>• Viaje a Japón — $5,000 / $8,000</Text>
-            <Text style={styles.meta}>• Apartados — $8,500 / $10,000</Text>
-            <Text style={styles.meta}>• Fondo Emergencia — $2,800 / $5,000</Text>
+            <Text style={styles.meta}>Viaje a Japón — $5,000 / $8,000</Text>
+            <Text style={styles.meta}>Apartados — $8,500 / $10,000</Text>
+            <Text style={styles.meta}>Fondo Emergencia — $2,800 / $5,000</Text>
           </View>
 
           <View style={styles.botonesContainer}>
@@ -56,14 +49,6 @@ export default function InicioScreen({ navigation }) {
               <Text style={styles.botonTexto}>Notificaciones</Text>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity 
-            style={styles.botonVolver}
-            onPress={() => navigation.navigate('Menu')} 
-          >
-            <Text style={styles.botonVolverTexto}>← Volver al Menú</Text>
-          </TouchableOpacity>
-
         </ScrollView>
       </View>
     </ImageBackground>

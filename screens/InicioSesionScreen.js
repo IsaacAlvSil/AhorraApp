@@ -1,133 +1,135 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Image, ImageBackground, StyleSheet, Alert, Button } from 'react-native';
 
-export default function InicioSesionScreen({ setScreen }) {
-  const [correo, setCorreo] = useState('');
-  const [contrasena, setContrasena] = useState('');
+export default function InicioSesionScreen({ navigation }) { 
+  const [correo, setCorreo] = useState('');
+  const [contrasena, setContrasena] = useState('');
 
-  const handleAcceder = () => {
-    if (correo.trim() === '' || contrasena.trim() === '') {
-      Alert.alert('Error', 'Por favor llena todos los campos');
-    } else {
-      Alert.alert('Éxito', `Bienvenido, Has iniciado sesión como: ${correo}`);
-      setScreen('inicio');
-    }
-  };
+  const handleAcceder = () => {
+    if (correo.trim() === '' || contrasena.trim() === '') {
+      Alert.alert('Error', 'Por favor llena todos los campos');
+    } else {
+      Alert.alert('Éxito', `Bienvenido, Has iniciado sesión como: ${correo}`);
+      
+      navigation.navigate('AppMainTabs'); 
+    }
+  };
 
-  const handleRegistrar = () => {
-    setScreen('registro');
-  };
+  const handleRegistrar = () => {
+    navigation.navigate('RegistroScreen'); 
+  };
 
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <ImageBackground
-        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
-        style={styles.background}
-      >
-        <View style={styles.container}>
-          <Button
-            title="Siguiente Screen"
-            color="#03A9F4"
-            onPress={() => setScreen('inicio')}
-          />
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ImageBackground
+        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
+        style={styles.background}
+      >
+        <View style={styles.container}>
+          
+          <Button
+            title="(Saltar Logueo)"
+            color="#03A9F4"
+            onPress={() => navigation.navigate('AppMainTabs')}
+          />
 
-          <Image
-            source={require('../assets/lAhorra-logo.jpg')}
-            style={styles.logo}
-          />
+          <Image
+            source={require('../assets/lAhorra-logo.jpg')}
+            style={styles.logo}
+          />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Ingresar correo electrónico"
-            placeholderTextColor="#ddd"
-            value={correo}
-            onChangeText={setCorreo}
-            keyboardType="email-address"
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Ingresar contraseña"
-            placeholderTextColor="#ddd"
-            value={contrasena}
-            onChangeText={setContrasena}
-            secureTextEntry
-          />
+          <TextInput
+            style={styles.input}
+            placeholder="Ingresar correo electrónico"
+            placeholderTextColor="#ddd"
+            value={correo}
+            onChangeText={setCorreo}
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Ingresar contraseña"
+            placeholderTextColor="#ddd"
+            value={contrasena}
+            onChangeText={setContrasena}
+            secureTextEntry
+          />
 
-          <TouchableOpacity onPress={() => console.log('Recuperar contraseña')}>
-            <Text style={styles.linkText}>¿Olvidaste la contraseña?</Text>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={() => console.log('Recuperar contraseña')}>
+            <Text style={styles.linkText}>¿Olvidaste la contrasena?</Text>
+          </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleAcceder}
-            activeOpacity={0.2}
-          >
-            <Text style={styles.buttonText}>ACCEDER</Text>
-          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleAcceder}
+            activeOpacity={0.2}
+          >
+            <Text style={styles.buttonText}>ACCEDER</Text>
+          </TouchableOpacity>
 
-          <Text style={styles.textoCuenta}>¿Aún no tienes cuenta?</Text>
-          <TouchableOpacity onPress={handleRegistrar}>
-            <Text style={styles.registrar}>REGISTRARSE</Text>
-          </TouchableOpacity>
-        </View>
-      </ImageBackground>
-    </SafeAreaView>
-  );
+          <Text style={styles.textoCuenta}>¿Aun no tienes cuenta?</Text>
+          <TouchableOpacity onPress={handleRegistrar}>
+            <Text style={styles.registrar}>REGISTRARSE</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-  },
-  logo: {
-    width: 250,
-    height: 100,
-    marginBottom: 60,
-    resizeMode: 'contain',
-  },
-  input: {
-    width: '90%',
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    padding: 15,
-    borderRadius: 25,
-    color: '#fff',
-    marginBottom: 15,
-  },
-  linkText: {
-    color: '#fff',
-    fontSize: 14,
-    marginBottom: 20,
-    textDecorationLine: 'underline',
-  },
-  button: {
-    backgroundColor: '#4c7c3f',
-    paddingVertical: 15,
-    width: '90%',
-    borderRadius: 25,
-    alignItems: 'center',
-    marginBottom: 25,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  textoCuenta: {
-    color: '#fff',
-    fontSize: 14,
-  },
-  registrar: {
-    color: '#fff',
-    fontWeight: 'bold',
-    marginTop: 5,
-    fontSize: 16,
-  },
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  logo: {
+    width: 250,
+    height: 100,
+    marginBottom: 60,
+    resizeMode: 'contain',
+  },
+  input: {
+    width: '90%',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    padding: 15,
+    borderRadius: 25,
+    color: '#fff',
+    marginBottom: 15,
+  },
+  linkText: {
+    color: '#fff',
+    fontSize: 14,
+    marginBottom: 20,
+    textDecorationLine: 'underline',
+  },
+  button: {
+    backgroundColor: '#4c7c3f',
+    paddingVertical: 15,
+    width: '90%',
+    borderRadius: 25,
+    alignItems: 'center',
+    marginBottom: 25,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  textoCuenta: {
+    color: '#fff',
+    fontSize: 14,
+  },
+  registrar: {
+    color: '#fff',
+    fontWeight: 'bold',
+    marginTop: 5,
+    fontSize: 16,
+  },
 });
