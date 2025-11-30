@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, Image, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 
 export default function InicioScreen({ navigation }) { 
 
@@ -19,12 +19,24 @@ export default function InicioScreen({ navigation }) {
     navigation.navigate('NotificacionesScreen');
   }
 
+  const handleCerrarSesion = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'InicioSesionScreen' }],
+    });
+  }
+
   return (
     <ImageBackground
       source={require('../assets/fondo.jpeg')}
       style={styles.fondo}
     >
       <View style={styles.overlay}>
+        
+        <TouchableOpacity style={styles.botonCerrarSesion} onPress={handleCerrarSesion}>
+          <Text style={styles.textoCerrarSesion}>Cerrar Sesión</Text>
+        </TouchableOpacity>
+
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           
 
@@ -87,10 +99,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(21, 41, 124, 0.7)',
   },
+  botonCerrarSesion: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    backgroundColor: 'rgba(255, 0, 0, 0.6)',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    zIndex: 10,
+  },
+  textoCerrarSesion: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
   scrollContainer: {
     alignItems: 'center',
     paddingVertical: 40,
     paddingHorizontal: 20,
+    marginTop: 30, 
   },
   logoContainer: {
     alignItems: 'center',

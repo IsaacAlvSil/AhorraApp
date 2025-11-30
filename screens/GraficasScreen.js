@@ -11,7 +11,7 @@ export default function GraficasScreen({ navigation }) {
 
   const total = data.reduce((acc, item) => acc + item.value, 0);
 
-  // Porcentajes para los labels flotantes ingresosPorcentaje
+
   const ingresosPorcentaje = ((5000 / total) * 100).toFixed(1);
   const gastosPorcentaje = ((3200 / total) * 100).toFixed(1);
 
@@ -32,7 +32,7 @@ export default function GraficasScreen({ navigation }) {
             <Text style={styles.cardSubtitle}>Gastos del mes: $3,200</Text>
           </View>
 
-          {/* === Gráfica + porcentajes flotantes === */}
+
           <View style={styles.graficaContainer}>
             <PieChart
               data={data}
@@ -40,12 +40,11 @@ export default function GraficasScreen({ navigation }) {
               showText={false}
             />
 
-            {/* Porcentaje Ingresos */}
+           
             <Text style={[styles.porcentaje, { top: 40, left: 15, color: '#f1918aff' }]}>
               Gastos {gastosPorcentaje}%
             </Text>
 
-            {/* Porcentaje Gastos */} 
             <Text style={[styles.porcentaje, { bottom: 40, right: 15, color: '#8aef8fff' }]}>
               Ingresos {ingresosPorcentaje}%
             </Text>

@@ -59,6 +59,16 @@ export default function InicioSesionScreen({ navigation }) {
           >
             <Text style={styles.buttonText}>ACCEDER</Text>
           </TouchableOpacity>
+        
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('RecuperarContrasena')}
+            style={{ marginBottom: 20 }}
+          >
+            <Text style={{ color: '#fff', textDecorationLine: 'underline' }}>
+              ¿Olvidaste tu contraseña?
+            </Text>
+          </TouchableOpacity>
+    
 
           <Text style={styles.textoCuenta}>¿Aun no tienes cuenta?</Text>
           <TouchableOpacity onPress={handleRegistrar}>

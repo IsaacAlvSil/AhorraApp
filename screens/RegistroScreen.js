@@ -8,26 +8,68 @@ import {
   ImageBackground, 
   StyleSheet, 
   Alert,
-  ScrollView // Agregamos ScrollView para manejar teclados y pantallas pequeñas
+  ScrollView,
+  ActivityIndicator 
 } from 'react-native';
+
+
+import DatabaseService from '../database/DatabaseService';
 
 export default function RegistroScreen({ navigation }) {
   const [nombreCompleto, setNombreCompleto] = useState('');
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
 
-  const handleRegistro = () => {
+  const [cargando, setCargando] = useState(false); 
+
+
+  const handleRegistro = async () => {
     if (nombreCompleto.trim() === '' || correo.trim() === '' || contrasena.trim() === '') {
       Alert.alert('Error', 'Por favor, llena todos los campos.');
       return;
     }
+
+    if (contrasena.length < 6) {
+      Alert.alert('Error', 'La contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
         
-    Alert.alert('Registro Exitoso', `Bienvenido, ${nombreCompleto}. Tu cuenta ha sido creada.`, [
-      {
-        text: "Continuar",
-        onPress: () => navigation.replace('AppMainTabs') 
+    setCargando(true);
+
+    try {
+    
+      const existeUsuario = await DatabaseService.buscarUsuarioPorEmail(correo);
+      
+      if (existeUsuario) {
+        Alert.alert('Error', 'Este correo ya está registrado. Intenta iniciar sesión.');
+        setCargando(false);
+        return;
       }
-    ]);
+
+
+      
+      await DatabaseService.addUsuario({
+        nombre: nombreCompleto,
+        apellido: '', 
+        email: correo,
+        telefono: '0000000000', 
+        password: contrasena
+      });
+
+      Alert.alert('Registro Exitoso', `Bienvenido, ${nombreCompleto}. Tu cuenta ha sido creada y guardada.`, [
+        {
+          text: "Ir al Login",
+        
+          onPress: () => navigation.navigate('InicioSesionScreen') 
+        }
+      ]);
+
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Hubo un problema al guardar tus datos.');
+    } finally {
+      setCargando(false);
+    }
   };
 
   const handleIrAInicioSesion = () => {
@@ -76,8 +118,13 @@ export default function RegistroScreen({ navigation }) {
               style={styles.button}
               activeOpacity={0.8}
               onPress={handleRegistro}
+              disabled={cargando} 
             >
-              <Text style={styles.buttonText}>REGISTRARME</Text>
+              {cargando ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>REGISTRARME</Text>
+              )}
             </TouchableOpacity>
 
             <Text style={styles.textoCuenta}>¿Ya tienes una cuenta?</Text>

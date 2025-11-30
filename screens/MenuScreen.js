@@ -15,7 +15,7 @@ import PantallaBienvenida from './PantallaBienvenida';
 import RegistroScreen from './RegistroScreen';
 
 export default function MenuScreen() {
-  const [screen, setScreen] = useState('bienvenida'); // Cambiado a 'bienvenida' como pantalla inicial
+  const [screen, setScreen] = useState('bienvenida'); 
 
   switch (screen) {
     case 'bienvenida':
