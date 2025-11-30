@@ -1,5 +1,4 @@
-// --- InicioSesionScreen.js ---
-// Igual que tu estilo de registro
+
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -51,7 +50,7 @@ export default function InicioSesionScreen({ navigation }) {
         `Sesión iniciada correctamente`,
         [{
           text: "Continuar",
-          onPress: () => navigation.replace("AppMainTabs")  // <-- LISTA LA NAVEGACIÓN
+          onPress: () => navigation.replace("AppMainTabs") 
         }]
       );
 
@@ -63,7 +62,7 @@ export default function InicioSesionScreen({ navigation }) {
   };
 
   const handleRegistrar = () => {
-    // SIEMPRE te regresa bien al registro
+
     navigation.navigate("RegistroScreen");
   };
 
@@ -91,12 +90,6 @@ export default function InicioSesionScreen({ navigation }) {
       >
         <ScrollView contentContainerStyle={styles.container}>
 
-          <TouchableOpacity
-            style={styles.skipButton}
-            onPress={() => navigation.replace("AppMainTabs")}
-          >
-            <Text style={styles.skipButtonText}>(Saltar logueo)</Text>
-          </TouchableOpacity>
 
           <Image
             source={require('../assets/logoSinfondo.png')}
