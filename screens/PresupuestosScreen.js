@@ -1,21 +1,32 @@
 import React, { useState } from 'react';
-import {Text,StyleSheet,View,Alert,TextInput,Button,TouchableOpacity,ImageBackground,} from 'react-native';
+import {Text, StyleSheet, View, TextInput, TouchableOpacity, ImageBackground, Alert, ScrollView} from 'react-native';
 
-export default function PresupuestosScreen({setScreen}) {
+export default function PresupuestosScreen({ navigation }) { 
   const [monto, setMonto] = useState('');
-  const [categoria, setCategoria] = useState('');
+  const [nota, setNota] = useState('');
 
-  const mostrarAlerta = () => {
-    if (monto.trim() === '' || categoria.trim() === '') {
-      Alert.alert('Error', 'Favor de rellenar todos los campos');
-    } else {
-      Alert.alert(
-        'Presupuesto definido',
-        `Tu presupuesto mensual de ${categoria} es de ${monto} pesos mexicanos`
-      );
-      setMonto('');
-      setCategoria('');
-    }
+  const handleIngresarDinero = () => {
+    const cantidad = parseFloat(monto);
+
+    if (isNaN(cantidad) || cantidad <= 0) {
+      Alert.alert('Error', 'Por favor, introduce un monto válido y mayor a cero.'); 
+      return;
+    } 
+
+    
+    Alert.alert(
+      '¡Ingreso Exitoso!',
+      `Has ingresado $${cantidad.toFixed(2)} a tu saldo. Nota: ${nota || 'N/A'}`,
+      [
+        { 
+          text: "OK", 
+          onPress: () => navigation.goBack() 
+        } 
+      ] 
+    );
+    
+    setMonto('');
+    setNota('');
   };
 
   return (
@@ -23,46 +34,45 @@ export default function PresupuestosScreen({setScreen}) {
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
       style={styles.background}
     >
-      <View style={styles.container}>
-        <Text style={styles.titulo}>Presupuestos</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.container}>
+          
+          <Text style={styles.titulo}>Ingresar Dinero</Text>
+          
+          <View style={styles.cajaPresupuesto}>
+            <Text style={styles.textoIntro}>¡Aumenta tu inversión o saldo!</Text>
+            
+            <Text style={styles.texto}>Monto a Ingresar</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="$ 0.00"
+              placeholderTextColor="#777"
+              value={monto}
+              onChangeText={setMonto}
+              keyboardType="numeric"
+            />
 
-        <Button
-                title="Volver a menu"
-                color="#03A9F4"
-                onPress={() => setScreen('menu')}
-                />
+            <Text style={styles.texto}>Concepto o Nota (Opcional)</Text>
+            <TextInput
+              style={[styles.input, styles.inputNota]}
+              placeholder="Ej: Inversión adicional"
+              placeholderTextColor="#777"
+              value={nota}
+              onChangeText={setNota}
+              multiline={true}
+              numberOfLines={4}
+            />
 
-        <View style={styles.cajaPresupuesto}>
-          <Text style={styles.textoIntro}>Establece tu presupuesto mensual</Text>
-
-          <Text style={styles.texto}>Monto</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="$"
-            placeholderTextColor="#777"
-            value={monto}
-            onChangeText={setMonto}
-            keyboardType="numeric"
-          />
-
-          <Text style={styles.texto}>Categoría</Text>
-          <TextInput
-            style={styles.input}
-            placeholder=""
-            placeholderTextColor="#777"
-            value={categoria}
-            onChangeText={setCategoria}
-          />
-
-          <TouchableOpacity
-            style={styles.boton}
-            activeOpacity={0.8}
-            onPress={mostrarAlerta}
-          >
-            <Text style={styles.botonTexto}>Aceptar</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.boton}
+              activeOpacity={0.8}
+              onPress={handleIngresarDinero}
+            >
+              <Text style={styles.botonTexto}>Ingresar Dinero</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </ImageBackground>
   );
 }
@@ -71,13 +81,18 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: 'cover',
+  },
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'center',
+    paddingVertical: 40,
   },
   container: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: 20,
+    backgroundColor: 'rgba(27, 40, 181, 0.4)', 
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   titulo: {
     color: '#fff',
@@ -87,23 +102,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   cajaPresupuesto: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 25,
     padding: 25,
     width: '90%',
+    maxWidth: 500,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
   },
   textoIntro: {
-    color: '#fff',
-    fontSize: 16,
+    color: '#15297c',
+    fontSize: 18,
     marginBottom: 20,
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   texto: {
-    color: '#fff',
+    color: '#333',
     fontSize: 14,
     marginBottom: 10,
     fontWeight: '600',
@@ -114,10 +131,16 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderRadius: 10,
     paddingHorizontal: 15,
-    paddingVertical: 8,
+    paddingVertical: 12,
     marginBottom: 20,
     backgroundColor: '#fff',
     color: '#000',
+    fontSize: 16,
+  },
+  inputNota: {
+    height: 100,
+    textAlignVertical: 'top',
+    paddingVertical: 10,
   },
   boton: {
     backgroundColor: '#4c7c3f',
@@ -125,6 +148,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     marginTop: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 3,
   },
   botonTexto: {
     color: '#fff',
