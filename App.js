@@ -14,6 +14,7 @@ import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
 import PresupuestosScreen from './screens/PresupuestosScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
+import PerfilScreen from './screens/PerfilScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -53,6 +54,7 @@ function AppMainTabs() {
       <Tab.Screen name="Transacciones" component={TransaccionesScreen} />
       <Tab.Screen name="Gráficas" component={GraficasScreen} />
       <Tab.Screen name="Presupuestos" component={PresupuestosScreen} />
+      <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
   );
 }
