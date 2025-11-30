@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
-
 import DatabaseService from './database/DatabaseService';
 import InicioSesionScreen from './screens/InicioSesionScreen';
 import RegistroScreen from './screens/RegistroScreen';
@@ -13,16 +12,15 @@ import InicioScreen from './screens/InicioScreen';
 import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
 import PresupuestosScreen from './screens/PresupuestosScreen'; 
-
 import MetasScreen from './screens/MetasScreen';
-
-
-import PresupuestosScreen from './screens/PresupuestosScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
+
+// IMPORTAR LAS NUEVAS SCREENS
+import TransferirScreen from './screens/TransferirScreen';
+import NotificacionesScreen from './screens/NotificacionesScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 function AppMainTabs() {
   return (
@@ -62,10 +60,7 @@ function AppMainTabs() {
   );
 }
 
-
 export default function App() {
-
-
   useEffect(() => {
     const initDB = async () => {
       try {
@@ -118,13 +113,26 @@ export default function App() {
           component={ValidacionCredencialesScreen} 
           options={{ title: 'Validación' }} 
         />
-        <Stack.Screen 
-        name="MetasScreen" 
-        component={MetasScreen} 
-        options={{ title: 'Mis Metas' }} 
-      />
-
         
+        <Stack.Screen 
+          name="MetasScreen" 
+          component={MetasScreen} 
+          options={{ title: 'Mis Metas' }} 
+        />
+
+        {/* AGREGAR ESTAS NUEVAS RUTAS */}
+        <Stack.Screen 
+          name="TransferirScreen" 
+          component={TransferirScreen} 
+          options={{ title: 'Transferir Dinero' }} 
+        />
+        
+        <Stack.Screen 
+          name="NotificacionesScreen" 
+          component={NotificacionesScreen} 
+          options={{ title: 'Notificaciones' }} 
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
