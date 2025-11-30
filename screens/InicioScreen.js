@@ -21,7 +21,7 @@ export default function InicioScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={require('../assets/fondo.jpeg')}
+      source={require('../assets/fondoregistro.jpeg')}
       style={styles.fondo}
     >
       <View style={styles.overlay}>
