@@ -12,12 +12,9 @@ import InicioScreen from './screens/InicioScreen';
 import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
 import PresupuestosScreen from './screens/PresupuestosScreen'; 
+
 import MetasScreen from './screens/MetasScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
-
-// IMPORTAR LAS NUEVAS SCREENS
-import TransferirScreen from './screens/TransferirScreen';
-import NotificacionesScreen from './screens/NotificacionesScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,6 +53,7 @@ function AppMainTabs() {
       <Tab.Screen name="Transacciones" component={TransaccionesScreen} />
       <Tab.Screen name="Gráficas" component={GraficasScreen} />
       <Tab.Screen name="Presupuestos" component={PresupuestosScreen} />
+      <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
   );
 }

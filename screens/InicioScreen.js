@@ -32,10 +32,7 @@ export default function InicioScreen({ navigation }) {
       style={styles.fondo}
     >
       <View style={styles.overlay}>
-        
-        <TouchableOpacity style={styles.botonCerrarSesion} onPress={handleCerrarSesion}>
-          <Text style={styles.textoCerrarSesion}>Cerrar Sesión</Text>
-        </TouchableOpacity>
+
 
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           

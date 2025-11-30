@@ -12,16 +12,17 @@ import {
   ActivityIndicator 
 } from 'react-native';
 
-
+// Revisa que la ruta coincida con donde tienes tu archivo
 import DatabaseService from '../database/DatabaseService';
 
 export default function RegistroScreen({ navigation }) {
   const [nombreCompleto, setNombreCompleto] = useState('');
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
-  const [cargando, setCargando] = useState(false); 
-  const handleRegistro = async () => {
+  const [cargando, setCargando] = useState(false);
 
+  const handleRegistro = async () => {
+    // 1. Validaciones
     if (nombreCompleto.trim() === '' || correo.trim() === '' || contrasena.trim() === '') {
       Alert.alert('Error', 'Por favor, llena todos los campos.');
       return;
@@ -35,7 +36,7 @@ export default function RegistroScreen({ navigation }) {
     setCargando(true);
 
     try {
-
+      // 2. Verificar duplicados
       const existeUsuario = await DatabaseService.buscarUsuarioPorEmail(correo);
       
       if (existeUsuario) {
@@ -44,14 +45,23 @@ export default function RegistroScreen({ navigation }) {
         return;
       }
 
+      // --- AQUÍ ESTÁ LA SOLUCIÓN AL ERROR ---
+      // Separamos el nombre completo para tener algo que poner en "apellido"
+      const partesNombre = nombreCompleto.trim().split(' ');
+      const nombreReal = partesNombre[0];
+      // Si hay más palabras, las unimos como apellido. Si no, ponemos "Usuario" o "." para cumplir el NOT NULL
+      const apellidoReal = partesNombre.length > 1 ? partesNombre.slice(1).join(' ') : 'Usuario';
+
+      // 3. Guardar en BD enviando datos seguros (sin nulos)
       await DatabaseService.addUsuario({
-        nombre: nombreCompleto,
+        nombre: nombreReal,
+        apellido: apellidoReal, // ¡Ahora siempre enviamos texto!
         email: correo,
+        telefono: 'Sin teléfono', // Enviamos un texto por defecto si la BD lo pidiera
         password: contrasena
       });
 
-
-      Alert.alert('Registro Exitoso', `Bienvenido, ${nombreCompleto}. Tu cuenta ha sido creada.`, [
+      Alert.alert('Registro Exitoso', `Bienvenido, ${nombreReal}. Tu cuenta ha sido creada.`, [
         {
           text: "Ir al Login",
           onPress: () => navigation.navigate('InicioSesionScreen') 
@@ -59,8 +69,8 @@ export default function RegistroScreen({ navigation }) {
       ]);
 
     } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Hubo un problema al guardar tus datos en la base de datos.');
+      console.error("Error en registro:", error);
+      Alert.alert('Error', 'Hubo un problema al guardar en la base de datos: ' + error.message);
     } finally {
       setCargando(false);
     }
