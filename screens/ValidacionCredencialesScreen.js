@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-export default function ValidacionCredencialesScreen({ setScreen }) {
+export default function ValidacionCredencialesScreen({ navigation }) {
   return (
     <ImageBackground
       source={{
@@ -23,7 +23,7 @@ export default function ValidacionCredencialesScreen({ setScreen }) {
         <Button
           title="Siguiente Screen"
           color="#03A9F4"
-          onPress={() => setScreen('transacciones')}
+          onPress={() => navigation.navigate('Transacciones')} 
         />
 
         <View style={styles.card}>
@@ -41,7 +41,7 @@ export default function ValidacionCredencialesScreen({ setScreen }) {
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
-          onPress={() => setScreen('menu')}
+          onPress={() => navigation.navigate('Menu')} 
         >
           <Text style={styles.buttonText}>← Volver al Menú</Text>
         </TouchableOpacity>

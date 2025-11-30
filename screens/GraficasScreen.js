@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground, Image } from 'react-native';
 
-export default function GraficasScreen({ setScreen }) {
+export default function GraficasScreen({ navigation }) {
   return (
     <ImageBackground
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
@@ -11,9 +11,9 @@ export default function GraficasScreen({ setScreen }) {
         <Text style={styles.title}>Gráfica por Mes</Text>
 
         <Button
-          title="Siguiente Screen"
+          title="Siguiente Screen (Ir a Filtros)"
           color="#03A9F4"
-          onPress={() => setScreen('filtrado')}
+          onPress={() => navigation.navigate('FiltradoScreen')} 
         />
 
         <View style={styles.card}>
@@ -35,7 +35,10 @@ export default function GraficasScreen({ setScreen }) {
           <Text style={styles.estadistica}>Promedio mensual: $3,200</Text>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => setScreen('filtrado')}>
+        <TouchableOpacity 
+            style={styles.button} 
+            onPress={() => navigation.goBack()}
+        >
           <Text style={styles.buttonText}>← Volver</Text>
         </TouchableOpacity>
       </View>

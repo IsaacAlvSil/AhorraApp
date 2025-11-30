@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, Image, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 
-export default function InicioScreen({ setScreen }) {
+export default function InicioScreen({ navigation }) { 
   return (
     <ImageBackground
       source={require('../assets/fondo.jpeg')}
@@ -19,11 +19,11 @@ export default function InicioScreen({ setScreen }) {
           </View>
 
           <Text style={styles.titulo}>Inicio</Text>
-
+          
           <Button
             title="Siguiente Screen"
             color="#03A9F4"
-            onPress={() => setScreen('validar credenciales')}
+            onPress={() => navigation.navigate('ValidarCredenciales')} 
           />
 
           <View style={styles.card}>
@@ -59,7 +59,7 @@ export default function InicioScreen({ setScreen }) {
 
           <TouchableOpacity 
             style={styles.botonVolver}
-            onPress={() => setScreen('menu')}
+            onPress={() => navigation.navigate('Menu')} 
           >
             <Text style={styles.botonVolverTexto}>← Volver al Menú</Text>
           </TouchableOpacity>
@@ -69,6 +69,7 @@ export default function InicioScreen({ setScreen }) {
     </ImageBackground>
   );
 }
+
 
 const styles = StyleSheet.create({
   fondo: {
