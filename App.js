@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'; // 1. Importamos useEffect
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -12,6 +12,11 @@ import RecuperarContrasena from './screens/RecuperarContraseña';
 import InicioScreen from './screens/InicioScreen'; 
 import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
+import PresupuestosScreen from './screens/PresupuestosScreen'; 
+
+import MetasScreen from './screens/MetasScreen';
+
+
 import PresupuestosScreen from './screens/PresupuestosScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
 import PerfilScreen from './screens/PerfilScreen';
@@ -115,6 +120,12 @@ export default function App() {
           component={ValidacionCredencialesScreen} 
           options={{ title: 'Validación' }} 
         />
+        <Stack.Screen 
+        name="MetasScreen" 
+        component={MetasScreen} 
+        options={{ title: 'Mis Metas' }} 
+      />
+
         
       </Stack.Navigator>
     </NavigationContainer>
