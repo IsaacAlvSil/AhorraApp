@@ -12,6 +12,9 @@ import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
 import PresupuestosScreen from './screens/PresupuestosScreen'; 
 
+import MetasScreen from './screens/MetasScreen';
+
+
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
 
 const Stack = createStackNavigator();
@@ -87,6 +90,12 @@ export default function App() {
           component={ValidacionCredencialesScreen} 
           options={{ title: 'Validación' }} 
         />
+        <Stack.Screen 
+        name="MetasScreen" 
+        component={MetasScreen} 
+        options={{ title: 'Mis Metas' }} 
+      />
+
         
       </Stack.Navigator>
     </NavigationContainer>
