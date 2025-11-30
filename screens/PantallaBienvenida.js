@@ -8,7 +8,7 @@ export default function PantallaBienvenida({ setScreen }) {
       style={styles.background}
     >
       <View style={styles.container}>
-        {/* Logo */}
+   
         <View style={styles.logoContainer}>
           <Image
             source={require('../assets/logo_ahorraApp.png')}
@@ -22,7 +22,7 @@ export default function PantallaBienvenida({ setScreen }) {
           Gestiona tus finanzas de manera inteligente y alcanza tus metas de ahorro
         </Text>
 
-        {/* Botones de acción */}
+       
         <TouchableOpacity 
           style={styles.buttonPrimary}
           onPress={() => setScreen('inicio sesion')}

@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
+
+import DatabaseService from './database/DatabaseService';
 import InicioSesionScreen from './screens/InicioSesionScreen';
 import RegistroScreen from './screens/RegistroScreen';
-
-import InicioScreen from './screens/InicioScreen';
+import RecuperarContrasena from './screens/RecuperarContraseña'; 
+import InicioScreen from './screens/InicioScreen'; 
 import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
 import PresupuestosScreen from './screens/PresupuestosScreen'; 
@@ -15,10 +17,12 @@ import PresupuestosScreen from './screens/PresupuestosScreen';
 import MetasScreen from './screens/MetasScreen';
 
 
+import PresupuestosScreen from './screens/PresupuestosScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 function AppMainTabs() {
   return (
@@ -58,7 +62,23 @@ function AppMainTabs() {
   );
 }
 
+
 export default function App() {
+
+
+  useEffect(() => {
+    const initDB = async () => {
+      try {
+        await DatabaseService.initialize();
+        console.log('Base de datos inicializada correctamente');
+      } catch (error) {
+        console.error('Error al inicializar la base de datos:', error);
+      }
+    };
+    
+    initDB();
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="InicioSesionScreen">
@@ -68,9 +88,16 @@ export default function App() {
           component={InicioSesionScreen} 
           options={{ headerShown: false }} 
         />
+        
         <Stack.Screen 
           name="RegistroScreen" 
           component={RegistroScreen} 
+          options={{ headerShown: false }} 
+        />
+        
+        <Stack.Screen 
+          name="RecuperarContrasena" 
+          component={RecuperarContrasena} 
           options={{ headerShown: false }} 
         />
         
@@ -85,6 +112,7 @@ export default function App() {
           component={PresupuestosScreen}
           options={{ title: 'Ingresar Dinero' }} 
         />
+        
         <Stack.Screen 
           name="ValidacionCredenciales" 
           component={ValidacionCredencialesScreen} 
