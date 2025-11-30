@@ -12,7 +12,9 @@ import InicioScreen from './screens/InicioScreen';
 import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
 import PresupuestosScreen from './screens/PresupuestosScreen'; 
-
+import TransferirScreen from './screens/TransferirScreen';
+import NotificacionesScreen from './screens/NotificacionesScreen';
+import PerfilScreen from './screens/PerfilScreen';
 import MetasScreen from './screens/MetasScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
 
