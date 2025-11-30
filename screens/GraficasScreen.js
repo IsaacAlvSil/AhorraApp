@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground, Image,ScrollView} from 'react-native';
+import { View, Text, TouchableOpacity, Button, StyleSheet, ImageBackground, Image, ScrollView } from 'react-native';
 
 export default function GraficasScreen({ navigation }) {
   return (
@@ -7,42 +7,35 @@ export default function GraficasScreen({ navigation }) {
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
       style={styles.background}
     >
-      <ScrollView>
-      <View style={styles.container}>
-        <Text style={styles.title}>Gráfica por Mes</Text>
+      <ScrollView contentContainerStyle={{ paddingTop: 60, paddingBottom: 40 }}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Gráfica por Mes</Text>
 
-        <Button
-          title="Ver mas"
-          color="#03A9F4"
-          onPress={() => navigation.navigate('FiltradoScreen')} 
-        />
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Ingresos totales: $5,000</Text>
-          <Text style={styles.cardSubtitle}>Gastos del mes: $3,200</Text>
-        </View>
-
-        <View style={styles.graficaPlaceholder}>
-          <Image
-            source={require('../assets/g1.jpeg')}
-            style={styles.graficaImagen}
-            resizeMode="contain"
+          <Button
+            title="Ver más detalles / Filtrar"
+            color="#03A9F4"
+            onPress={() => navigation.navigate('FiltradoScreen')}
           />
-        </View>
 
-        <View style={styles.estadisticas}>
-          <Text style={styles.estadistica}>Mes con más ingresos: Enero</Text>
-          <Text style={styles.estadistica}>Mes con más gastos: Diciembre</Text>
-          <Text style={styles.estadistica}>Promedio mensual: $3,200</Text>
-        </View>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Ingresos totales: $5,000</Text>
+            <Text style={styles.cardSubtitle}>Gastos del mes: $3,200</Text>
+          </View>
 
-        <TouchableOpacity 
-            style={styles.button} 
-            onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Volver</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.graficaPlaceholder}>
+            <Image
+              source={require('../assets/g1.jpeg')}
+              style={styles.graficaImagen}
+              resizeMode="contain"
+            />
+          </View>
+
+          <View style={styles.estadisticas}>
+            <Text style={styles.estadistica}>Mes con más ingresos: Enero.</Text>
+            <Text style={styles.estadistica}>Mes con más gastos: Septiembre.</Text>
+            <Text style={styles.estadistica}>Ahorro promedio mensual: $500.</Text>
+          </View>
+        </View>
       </ScrollView>
     </ImageBackground>
   );
@@ -56,7 +49,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 20,
   },
@@ -97,27 +90,26 @@ const styles = StyleSheet.create({
   graficaImagen: {
     width: '100%',
     height: '100%',
-    borderRadius: 25,
   },
   estadisticas: {
     width: '90%',
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    padding: 20,
-    borderRadius: 25,
-    marginBottom: 25,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 20,
   },
   estadistica: {
     fontSize: 16,
-    color: '#fff',
-    marginBottom: 10,
+    color: 'white',
+    marginBottom: 5,
   },
   button: {
-    backgroundColor: '#4c7c3f',
+    backgroundColor: '#03A9F4',
     paddingVertical: 15,
-    width: '90%',
     borderRadius: 25,
+    width: '90%',
     alignItems: 'center',
-    marginBottom: 25,
+    marginTop: 20,
   },
   buttonText: {
     color: '#fff',

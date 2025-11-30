@@ -1,106 +1,93 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
-
 
 import InicioSesionScreen from './screens/InicioSesionScreen';
 import RegistroScreen from './screens/RegistroScreen';
 
 import InicioScreen from './screens/InicioScreen';
-import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
-import MenuScreen from './screens/MenuScreen'; 
+import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
-import FiltradoScreen from './screens/FiltradoScreen';
-import Transacciones from './screens/Transacciones';
+import PresupuestosScreen from './screens/PresupuestosScreen'; 
 
+import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
+
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
 
-function HomeStackScreen() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="InicioMain" component={InicioScreen} />
-      <Stack.Screen name="ValidarCredenciales" component={ValidacionCredencialesScreen} />
-      <Stack.Screen name="Menu" component={MenuScreen} />
-    </Stack.Navigator>
-  );
-}
-
-function GraficasStackScreen() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="GraficasMain" 
-        component={GraficasScreen} 
-        options={{ headerShown: false }} 
-      /> 
-      <Stack.Screen 
-        name="FiltradoScreen" 
-        component={FiltradoScreen} 
-        options={{ title: 'Filtros y Detalle' }}
-      />
-    </Stack.Navigator>
-  );
-}
 function AppMainTabs() {
   return (
     <Tab.Navigator
-        initialRouteName="Inicio"
-        screenOptions={({ route }) => ({
-          headerShown: false, 
-          tabBarIcon: ({ color, size }) => {
-            let iconName;
+      initialRouteName="Inicio"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          let rn = route.name;
 
-            if (route.name === 'Inicio') {
-              iconName = 'home-outline';
-            } else if (route.name === 'Gráficas') {
-              iconName = 'stats-chart-outline';
-            } else if (route.name === 'Transacciones') {
-              iconName = 'swap-horizontal-outline';
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#15297c',
-          tabBarInactiveTintColor: 'gray',
-          tabBarStyle: { paddingBottom: 5, height: 60 },
-        })}
-      >
-        <Tab.Screen name="Inicio" component={HomeStackScreen} /> 
-        <Tab.Screen name="Gráficas" component={GraficasStackScreen} /> 
-        <Tab.Screen name="Transacciones" component={Transacciones} />
+          if (rn === 'Inicio') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (rn === 'Transacciones') {
+            iconName = focused ? 'swap-horizontal' : 'swap-horizontal-outline';
+          } else if (rn === 'Gráficas') {
+            iconName = focused ? 'stats-chart' : 'stats-chart-outline';
+          } else if (rn === 'Presupuestos') {
+            iconName = focused ? 'wallet' : 'wallet-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#03A9F4',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: { 
+          backgroundColor: '#15297c',
+          borderTopWidth: 0,
+        },
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Inicio" component={InicioScreen} />
+      <Tab.Screen name="Transacciones" component={TransaccionesScreen} />
+      <Tab.Screen name="Gráficas" component={GraficasScreen} />
+      <Tab.Screen name="Presupuestos" component={PresupuestosScreen} />
     </Tab.Navigator>
   );
 }
 
-function AuthStackScreen() {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen 
-                name="InicioSesion" 
-                component={InicioSesionScreen} 
-            />
-            <Stack.Screen 
-                name="RegistroScreen" 
-                component={RegistroScreen} 
-            />
-        </Stack.Navigator>
-    );
-}
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName="InicioSesionScreen">
+        
         <Stack.Screen 
-          name="AuthStack" 
-          component={AuthStackScreen} 
+          name="InicioSesionScreen" 
+          component={InicioSesionScreen} 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="RegistroScreen" 
+          component={RegistroScreen} 
+          options={{ headerShown: false }} 
         />
         
         <Stack.Screen 
           name="AppMainTabs" 
           component={AppMainTabs} 
+          options={{ headerShown: false }} 
         />
+
+        <Stack.Screen 
+          name="IngresarDinero" 
+          component={PresupuestosScreen}
+          options={{ title: 'Ingresar Dinero' }} 
+        />
+        <Stack.Screen 
+          name="ValidacionCredenciales" 
+          component={ValidacionCredencialesScreen} 
+          options={{ title: 'Validación' }} 
+        />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

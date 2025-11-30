@@ -2,6 +2,23 @@ import React from 'react';
 import { View, Text, StyleSheet, Button, Image, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
 
 export default function InicioScreen({ navigation }) { 
+
+  const handleIrAInversion = () => {
+    navigation.navigate('IngresarDinero');
+  }
+
+  const handleIrAMetas = () => {
+    navigation.navigate('MetasScreen');
+  }
+
+  const handleIrATransferir = () => {
+    navigation.navigate('TransferirScreen');
+  }
+  
+  const handleIrANotificaciones = () => {
+    navigation.navigate('NotificacionesScreen');
+  }
+
   return (
     <ImageBackground
       source={require('../assets/fondo.jpeg')}
@@ -10,15 +27,9 @@ export default function InicioScreen({ navigation }) {
       <View style={styles.overlay}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           
-          <View style={styles.logoContainer}>
-            <Image
-              source={require('../assets/logo_ahorraApp.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
-          </View>
 
           <Text style={styles.titulo}>Inicio</Text>
+          
           <View style={styles.card}>
             <Text style={styles.cardTitulo}>Tu Saldo Actual</Text>
             <Text style={styles.saldo}>$14,892.50</Text>
@@ -33,19 +44,31 @@ export default function InicioScreen({ navigation }) {
           </View>
 
           <View style={styles.botonesContainer}>
-            <TouchableOpacity style={styles.botonAccion}>
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrAInversion} 
+            >
               <Text style={styles.botonTexto}>Invertir</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.botonAccion}>
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrAMetas} 
+            >
               <Text style={styles.botonTexto}>Metas</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.botonAccion}>
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrATransferir} 
+            >
               <Text style={styles.botonTexto}>Transferir</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.botonAccion}>
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrANotificaciones} 
+            >
               <Text style={styles.botonTexto}>Notificaciones</Text>
             </TouchableOpacity>
           </View>
@@ -54,7 +77,6 @@ export default function InicioScreen({ navigation }) {
     </ImageBackground>
   );
 }
-
 
 const styles = StyleSheet.create({
   fondo: {
