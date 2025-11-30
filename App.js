@@ -12,7 +12,6 @@ import RecuperarContrasena from './screens/RecuperarContraseña';
 import InicioScreen from './screens/InicioScreen'; 
 import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
-import PresupuestosScreen from './screens/PresupuestosScreen'; 
 
 import MetasScreen from './screens/MetasScreen';
 
