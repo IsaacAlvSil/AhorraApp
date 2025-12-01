@@ -6,13 +6,19 @@ const getDB = async () => {
 };
 
 export const PresupuestoModel = {
+  // 👇 ESTA ES LA FUNCIÓN QUE TE FALTABA 👇
+  obtenerSaldoTotal: async () => {
+    const db = await getDB();
+    // getFirstAsync es ideal para obtener un solo resultado como la suma total
+    const result = await db.getFirstAsync('SELECT SUM(monto) as total FROM presupuestos');
+    return result; 
+  },
+  // 👆 --------------------------------- 👆
+
   // CREAR: Inserta un nuevo registro
   crear: async (monto, nota) => {
     const db = await getDB();
     const fecha = new Date().toISOString();
-    
-    // 'runAsync' es para comandos que no devuelven filas (INSERT, UPDATE, DELETE)
-    // Retorna un objeto con { lastInsertRowId, changes }
     const result = await db.runAsync(
       'INSERT INTO presupuestos (monto, nota, fecha) VALUES (?, ?, ?)',
       monto, nota, fecha
@@ -23,8 +29,6 @@ export const PresupuestoModel = {
   // LEER: Obtiene todos los registros
   obtenerTodos: async () => {
     const db = await getDB();
-    
-    // 'getAllAsync' ejecuta la consulta y devuelve directamente el array de resultados
     const allRows = await db.getAllAsync('SELECT * FROM presupuestos ORDER BY id DESC');
     return allRows;
   },

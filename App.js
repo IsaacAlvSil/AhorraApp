@@ -106,7 +106,7 @@ export default function App() {
         />
 
         <Stack.Screen 
-          name="IngresarDinero" 
+          name="PresupuestosScreen" 
           component={PresupuestosScreen}
           options={{ title: 'Ingresar Dinero' }} 
         />

@@ -35,12 +35,7 @@ export default function TransaccionesScreen({setScreen}) {
       <View style={styles.container}>
         <Text style={styles.titulo}>Historial de Transacciones</Text>
         
-        <TouchableOpacity 
-             onPress={() => setScreen('nuevaTransaccion')}
-             style={styles.actionButton}
-        >
-            <Text style={styles.actionButtonText}>+ Nueva Transacción</Text>
-        </TouchableOpacity>
+        
 
         <View style={styles.listaContainer}>
           <FlatList

@@ -1,277 +1,183 @@
-import React from 'react';
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  ImageBackground, 
-  ScrollView, 
-  TouchableOpacity, 
-  SafeAreaView, 
-  Dimensions 
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; 
-
-const { width } = Dimensions.get('window');
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+// 1. Importamos el hook que detecta el foco
+import { useFocusEffect } from '@react-navigation/native';
+// 2. Importamos el controlador (asumiendo que InicioScreen está dentro de una carpeta 'screens')
+import { PresupuestoController } from '../controllers/PresupuestoController';
 
 export default function InicioScreen({ navigation }) { 
+  const [saldoTotal, setSaldoTotal] = useState(0);
 
-  const handleIrAInversion = () => navigation.navigate('IngresarDinero');
-  const handleIrAMetas = () => navigation.navigate('MetasScreen');
-  const handleIrATransferir = () => navigation.navigate('TransferirScreen');
-  const handleIrANotificaciones = () => navigation.navigate('NotificacionesScreen');
+  // useFocusEffect se ejecuta CADA VEZ que esta pantalla aparece en el celular
+  useFocusEffect(
+    useCallback(() => {
+      console.log("🔄 Pantalla Inicio enfocada: Recargando saldo...");
+      cargarSaldo();
+    }, [])
+  );
 
-  const handleIrAAjustes = () => {
-    navigation.navigate('Ajustes');
+  const cargarSaldo = async () => {
+    try {
+      const total = await PresupuestoController.calcularSaldoTotal();
+      console.log("💰 Saldo recibido de la BD:", total);
+      setSaldoTotal(total);
+    } catch (error) {
+      console.error("❌ Error al cargar el saldo:", error);
+    }
+  };
+
+  const handleIrAInversion = () => {
+    navigation.navigate('PresupuestosScreen'); 
   }
 
+  const handleIrAMetas = () => {
+    navigation.navigate('MetasScreen');
+  }
+
+  const handleIrATransferir = () => {
+    navigation.navigate('TransferirScreen');
+  }
+  
+  const handleIrANotificaciones = () => {
+    navigation.navigate('NotificacionesScreen');
+  }
+
+  const formatoMoneda = (cantidad) => {
+    // Si la cantidad es 0 o nula, mostramos $0.00
+    if (!cantidad) return '$0.00';
+    return '$' + parseFloat(cantidad).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  };
+
   return (
-    <View style={styles.mainContainer}>
-      <ImageBackground
-        source={require('../assets/fondo.png')}
-        style={styles.fondo}
-      >
-        {/* Capa oscura simple para que las letras blancas se lean bien */}
-        <View style={styles.overlay}>
-            <SafeAreaView style={styles.safeArea}>
+    <ImageBackground
+      source={require('../assets/fondo.jpeg')} 
+      style={styles.fondo}
+    >
+      <View style={styles.overlay}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          
+          <Text style={styles.titulo}>Inicio</Text>
+          
+          <View style={styles.card}>
+            <Text style={styles.cardTitulo}>Tu Saldo Actual</Text>
+            {/* Aquí se muestra el saldo actualizado */}
+            <Text style={styles.saldo}>{formatoMoneda(saldoTotal)}</Text>
+            <Text style={styles.cambio}>Total acumulado disponible</Text>
+          </View>
+
+          <View style={styles.card}>
+            <Text style={styles.cardTitulo}>Metas de Ahorro</Text>
+            <Text style={styles.meta}>Viaje a Japón — $5,000 / $8,000</Text>
+            <Text style={styles.meta}>Apartados — $8,500 / $10,000</Text>
+            <Text style={styles.meta}>Fondo Emergencia — $2,800 / $5,000</Text>
+          </View>
+
+          <View style={styles.botonesContainer}>
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrAInversion} 
+            >
+              <Text style={styles.botonTexto}>Invertir / Ingresar</Text>
+            </TouchableOpacity>
             
-            {/* 1. Encabezado Simple */}
-            <View style={styles.header}>
-                <View>
-                    <Text style={styles.saludo}>Hola, Usuario</Text>
-                </View>
-                <TouchableOpacity onPress={handleIrAAjustes} style={styles.botonAjustes}>
-                    <Ionicons name="settings-outline" size={26} color="#fff" />
-                </TouchableOpacity>
-            </View>
-
-            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                
-                {/* 2. Tarjeta de Saldo (Limpia y Blanca) */}
-                <View style={styles.cardSaldo}>
-                    <Text style={styles.tituloSaldo}>Saldo Disponible</Text>
-                    <Text style={styles.montoSaldo}>$14,892.50</Text>
-                    
-                    <View style={styles.indicadorCambio}>
-                        <Ionicons name="arrow-up" size={16} color="#4c7c3f" />
-                        <Text style={styles.textoCambio}> +$500.45 este mes</Text>
-                    </View>
-                </View>
-
-                {/* 3. Botones (Sencillos y directos) */}
-                <Text style={styles.seccionTitulo}>Acciones</Text>
-                <View style={styles.gridBotones}>
-                    <BotonSimple 
-                        icon="trending-up" 
-                        text="Invertir" 
-                        onPress={handleIrAInversion} 
-                    />
-                    <BotonSimple 
-                        icon="flag" 
-                        text="Metas" 
-                        onPress={handleIrAMetas} 
-                    />
-                    <BotonSimple 
-                        icon="swap-horizontal" 
-                        text="Transferir" 
-                        onPress={handleIrATransferir} 
-                    />
-                    <BotonSimple 
-                        icon="notifications" 
-                        text="Avisos" 
-                        onPress={handleIrANotificaciones} 
-                    />
-                </View>
-
-                {/* 4. Lista de Metas (Estilo Lista Clásica) */}
-                <Text style={styles.seccionTitulo}>Mis Metas</Text>
-                <View style={styles.listaMetas}>
-                    <FilaMeta titulo="Viaje a Japón" monto="$5,000 / $8,000" color="#FF5252" />
-                    <View style={styles.separador} />
-                    <FilaMeta titulo="Apartados" monto="$8,500 / $10,000" color="#448AFF" />
-                    <View style={styles.separador} />
-                    <FilaMeta titulo="Fondo Emergencia" monto="$2,800 / $5,000" color="#4CAF50" />
-                </View>
-
-                <View style={{height: 50}} /> 
-            </ScrollView>
-            </SafeAreaView>
-        </View>
-      </ImageBackground>
-    </View>
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrAMetas} 
+            >
+              <Text style={styles.botonTexto}>Metas</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrATransferir} 
+            >
+              <Text style={styles.botonTexto}>Transferir</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.botonAccion}
+              onPress={handleIrANotificaciones} 
+            >
+              <Text style={styles.botonTexto}>Notificaciones</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    </ImageBackground>
   );
 }
 
-// Componente pequeño para los botones cuadrados
-const BotonSimple = ({ icon, text, onPress }) => (
-    <TouchableOpacity style={styles.botonCaja} onPress={onPress} activeOpacity={0.7}>
-        <View style={styles.circuloIcono}>
-            <Ionicons name={icon} size={24} color="#15297c" />
-        </View>
-        <Text style={styles.textoBoton}>{text}</Text>
-    </TouchableOpacity>
-);
-
-// Componente pequeño para las filas de metas
-const FilaMeta = ({ titulo, monto, color }) => (
-    <View style={styles.filaMeta}>
-        <View style={[styles.puntoColor, { backgroundColor: color }]} />
-        <View style={{flex: 1}}>
-            <Text style={styles.tituloMeta}>{titulo}</Text>
-            <Text style={styles.montoMeta}>{monto}</Text>
-        </View>
-    </View>
-);
-
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
   fondo: {
     flex: 1,
     resizeMode: 'cover',
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(21, 41, 124, 0.8)', // Azul oscuro simple, sin degradados
-  },
-  safeArea: {
-    flex: 1,
+    backgroundColor: 'rgba(21, 41, 124, 0.7)',
   },
   scrollContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
-  },
-  
-  // Header
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingVertical: 40,
     paddingHorizontal: 20,
-    marginTop: 15,
-    marginBottom: 20,
+    marginTop: 30, 
   },
-  saludo: {
-    fontSize: 22,
+  titulo: {
+    fontSize: 28,
+    color: 'white',
     fontWeight: 'bold',
-    color: '#fff',
+    marginBottom: 25,
   },
-  botonAjustes: {
-    padding: 5,
-  },
-
-  // Tarjeta Saldo (Diseño limpio)
-  cardSaldo: {
-    backgroundColor: '#fff',
+  card: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    width: '90%',
     borderRadius: 15,
     padding: 20,
-    width: '100%',
-    marginBottom: 25,
-    // Sombra muy sutil, casi imperceptible
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 5,
   },
-  tituloSaldo: {
-    color: '#666',
-    fontSize: 14,
-    marginBottom: 5,
-    fontWeight: '500',
-  },
-  montoSaldo: {
-    color: '#15297c', // Tu color azul corporativo
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  indicadorCambio: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0f9f0', // Verde muy clarito de fondo
-    alignSelf: 'flex-start',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  textoCambio: {
-    color: '#4c7c3f',
-    fontSize: 13,
-    fontWeight: 'bold',
-  },
-
-  // Títulos
-  seccionTitulo: {
-    color: '#fff',
+  cardTitulo: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15,
+    color: '#15297c',
+    marginBottom: 10,
   },
-
-  // Grid de Botones
-  gridBotones: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 30,
-  },
-  botonCaja: {
-    backgroundColor: 'rgba(255,255,255,0.15)', // Transparente sutil
-    width: (width - 60) / 4,
-    height: 80,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
-  },
-  circuloIcono: {
-    backgroundColor: '#fff',
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: 'center',
-    alignItems: 'center',
+  saldo: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#4c7c3f',
     marginBottom: 5,
   },
-  textoBoton: {
-    color: '#fff',
-    fontSize: 11,
-    fontWeight: '600',
-  },
-
-  // Lista Metas
-  listaMetas: {
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    padding: 5,
-    paddingVertical: 10,
-  },
-  filaMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-  },
-  puntoColor: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: 15,
-  },
-  tituloMeta: {
-    color: '#333',
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  montoMeta: {
+  cambio: {
+    fontSize: 14,
     color: '#666',
-    fontSize: 13,
+    fontStyle: 'italic'
   },
-  separador: {
-    height: 1,
-    backgroundColor: '#f0f0f0',
-    marginLeft: 40, 
-    marginRight: 15,
+  meta: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 8,
+  },
+  botonesContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: '90%',
+    marginBottom: 20,
+  },
+  botonAccion: {
+    backgroundColor: '#03A9F4',
+    padding: 15,
+    borderRadius: 10,
+    width: '48%',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  botonTexto: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });

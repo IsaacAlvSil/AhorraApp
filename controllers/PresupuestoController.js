@@ -2,14 +2,24 @@ import { PresupuestoModel } from '../models/PresupuestoModel';
 
 export const PresupuestoController = {
   
+  // 1. ESTA ES LA FUNCIÓN QUE TE FALTA Y CAUSA EL ERROR
+  calcularSaldoTotal: async () => {
+    try {
+      const resultado = await PresupuestoModel.obtenerSaldoTotal();
+      // Si la tabla está vacía, resultado o resultado.total pueden ser null
+      return resultado?.total || 0;
+    } catch (error) {
+      console.error("Error calculando saldo en Controller:", error);
+      return 0;
+    }
+  },
+
+  // 2. Funciones existentes (CRUD)
   agregarPresupuesto: async (monto, nota) => {
-    // Validaciones de negocio
     const cantidad = parseFloat(monto);
     if (isNaN(cantidad) || cantidad <= 0) {
       throw new Error('El monto debe ser un número válido mayor a 0.');
     }
-    
-    // Llamada al modelo
     try {
       await PresupuestoModel.crear(cantidad, nota);
       return true;
