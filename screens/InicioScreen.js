@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { PresupuestoController } from '../controllers/PresupuestoController';
 
 export default function InicioScreen({ navigation }) { 
+  const [saldoTotal, setSaldoTotal] = useState(0);
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log("🔄 Pantalla Inicio enfocada: Recargando saldo...");
+      cargarSaldo();
+    }, [])
+  );
+
+  const cargarSaldo = async () => {
+    try {
+      const total = await PresupuestoController.calcularSaldoTotal();
+      console.log("Saldo recibido de la BD:", total);
+      setSaldoTotal(total);
+    } catch (error) {
+      console.error("Error al cargar el saldo:", error);
+    }
+  };
 
   const handleIrAInversion = () => {
-    navigation.navigate('IngresarDinero');
+    navigation.navigate('PresupuestosScreen'); 
   }
 
   const handleIrAMetas = () => {
@@ -19,33 +39,25 @@ export default function InicioScreen({ navigation }) {
     navigation.navigate('NotificacionesScreen');
   }
 
-  const handleCerrarSesion = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'InicioSesionScreen' }],
-    });
-  }
+  const formatoMoneda = (cantidad) => {
+    if (!cantidad) return '$0.00';
+    return '$' + parseFloat(cantidad).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  };
 
   return (
     <ImageBackground
-      source={require('../assets/fondoregistro.jpeg')}
+      source={require('../assets/fondo.jpeg')}
       style={styles.fondo}
     >
       <View style={styles.overlay}>
-        
-        <TouchableOpacity style={styles.botonCerrarSesion} onPress={handleCerrarSesion}>
-          <Text style={styles.textoCerrarSesion}>Cerrar Sesión</Text>
-        </TouchableOpacity>
-
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           
-
           <Text style={styles.titulo}>Inicio</Text>
           
           <View style={styles.card}>
             <Text style={styles.cardTitulo}>Tu Saldo Actual</Text>
-            <Text style={styles.saldo}>$14,892.50</Text>
-            <Text style={styles.cambio}>+ $500.45 este mes</Text>
+            <Text style={styles.saldo}>{formatoMoneda(saldoTotal)}</Text>
+            <Text style={styles.cambio}>Total acumulado disponible</Text>
           </View>
 
           <View style={styles.card}>
@@ -60,7 +72,7 @@ export default function InicioScreen({ navigation }) {
               style={styles.botonAccion}
               onPress={handleIrAInversion} 
             >
-              <Text style={styles.botonTexto}>Invertir</Text>
+              <Text style={styles.botonTexto}>Invertir / Ingresar</Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
@@ -99,35 +111,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(21, 41, 124, 0.7)',
   },
-  botonCerrarSesion: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    backgroundColor: 'rgba(255, 0, 0, 0.6)',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    zIndex: 10,
-  },
-  textoCerrarSesion: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
   scrollContainer: {
     alignItems: 'center',
     paddingVertical: 40,
     paddingHorizontal: 20,
     marginTop: 30, 
-  },
-  logoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  logo: {
-    width: 130,
-    height: 130,
   },
   titulo: {
     fontSize: 28,
@@ -153,7 +141,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   saldo: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#4c7c3f',
     marginBottom: 5,
@@ -161,6 +149,7 @@ const styles = StyleSheet.create({
   cambio: {
     fontSize: 14,
     color: '#666',
+    fontStyle: 'italic'
   },
   meta: {
     fontSize: 16,
@@ -184,19 +173,6 @@ const styles = StyleSheet.create({
   },
   botonTexto: {
     color: 'white',
-    fontWeight: 'bold',
-  },
-  botonVolver: {
-    backgroundColor: '#4c7c3f',
-    paddingVertical: 15,
-    width: '90%',
-    borderRadius: 25,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  botonVolverTexto: {
-    color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
   },
 });

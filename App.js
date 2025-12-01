@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react'; // 1. Importamos useEffect
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-
 
 import DatabaseService from './database/DatabaseService';
 import InicioSesionScreen from './screens/InicioSesionScreen';
@@ -12,12 +11,16 @@ import RecuperarContrasena from './screens/RecuperarContraseña';
 import InicioScreen from './screens/InicioScreen'; 
 import TransaccionesScreen from './screens/Transacciones';
 import GraficasScreen from './screens/GraficasScreen';
-import PresupuestosScreen from './screens/PresupuestosScreen';
+import PresupuestosScreen from './screens/PresupuestosScreen'; 
+import TransferirScreen from './screens/TransferirScreen';
+import NotificacionesScreen from './screens/NotificacionesScreen';
+import PerfilScreen from './screens/PerfilScreen';
+import MetasScreen from './screens/MetasScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
+import AjustesScreen from './screens/AjustesScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 function AppMainTabs() {
   return (
@@ -36,6 +39,8 @@ function AppMainTabs() {
             iconName = focused ? 'stats-chart' : 'stats-chart-outline';
           } else if (rn === 'Presupuestos') {
             iconName = focused ? 'wallet' : 'wallet-outline';
+          } else if (rn === 'Perfil') {
+             iconName = focused ? 'person' : 'person-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -53,14 +58,12 @@ function AppMainTabs() {
       <Tab.Screen name="Transacciones" component={TransaccionesScreen} />
       <Tab.Screen name="Gráficas" component={GraficasScreen} />
       <Tab.Screen name="Presupuestos" component={PresupuestosScreen} />
+      <Tab.Screen name="Perfil" component={PerfilScreen} />
     </Tab.Navigator>
   );
 }
 
-
 export default function App() {
-
-
   useEffect(() => {
     const initDB = async () => {
       try {
@@ -103,7 +106,7 @@ export default function App() {
         />
 
         <Stack.Screen 
-          name="IngresarDinero" 
+          name="PresupuestosScreen" 
           component={PresupuestosScreen}
           options={{ title: 'Ingresar Dinero' }} 
         />
@@ -114,6 +117,30 @@ export default function App() {
           options={{ title: 'Validación' }} 
         />
         
+        <Stack.Screen 
+          name="MetasScreen" 
+          component={MetasScreen} 
+          options={{ title: 'Mis Metas' }} 
+        />
+
+        <Stack.Screen 
+          name="TransferirScreen" 
+          component={TransferirScreen} 
+          options={{ title: 'Transferir Dinero' }} 
+        />
+        
+        <Stack.Screen 
+          name="NotificacionesScreen" 
+          component={NotificacionesScreen} 
+          options={{ title: 'Notificaciones' }} 
+        />
+
+        <Stack.Screen 
+          name="Ajustes" 
+          component={AjustesScreen} 
+          options={{ headerShown: false }} 
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,86 +1,43 @@
-
-
-import React, { useState, useEffect } from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-  ScrollView
+import React, { useState } from 'react';
+import { 
+  SafeAreaView, View, Text, TextInput, TouchableOpacity, 
+  Image, ImageBackground, StyleSheet, Alert, ActivityIndicator 
 } from 'react-native';
-import { UsuarioController } from '../controllers/UsuarioController';
+import DatabaseService from '../database/DatabaseService';
 
-const controller = new UsuarioController();
-
-export default function InicioSesionScreen({ navigation }) {
-
+export default function InicioSesionScreen({ navigation }) { 
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [inicializando, setInicializando] = useState(true);
-
-  useEffect(() => {
-    const inicializarBD = async () => {
-      try {
-        await controller.initialize();
-      } catch (e) {
-        Alert.alert('Error', 'No se pudo inicializar la BD');
-      } finally {
-        setInicializando(false);
-      }
-    };
-    inicializarBD();
-  }, []);
+  const [cargando, setCargando] = useState(false);
 
   const handleAcceder = async () => {
-    if (loading) return;
+    if (correo.trim() === '' || contrasena.trim() === '') {
+      Alert.alert('Error', 'Por favor llena todos los campos');
+      return;
+    }
+
+    setCargando(true);
 
     try {
-      setLoading(true);
-      const usuario = await controller.login(correo, contrasena);
-
-      Alert.alert(
-        "Bienvenida",
-        `Sesión iniciada correctamente`,
-        [{
-          text: "Continuar",
-          onPress: () => navigation.replace("AppMainTabs") 
-        }]
-      );
-
-    } catch (e) {
-      Alert.alert("Error", e.message);
+      const usuarioEncontrado = await DatabaseService.buscarUsuarioPorCredenciales(correo, contrasena);
+      if (usuarioEncontrado) {
+        DatabaseService.establecerSesion(usuarioEncontrado);
+        Alert.alert('Bienvenido', `Hola de nuevo, ${usuarioEncontrado.nombre}`);
+        navigation.replace('AppMainTabs');
+      } else {
+        Alert.alert('Error', 'Correo o contraseña incorrectos.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Ocurrió un problema al iniciar sesión');
     } finally {
-      setLoading(false);
+      setCargando(false);
     }
   };
 
   const handleRegistrar = () => {
-
-    navigation.navigate("RegistroScreen");
+    navigation.navigate('RegistroScreen'); 
   };
-
-  if (inicializando) {
-    return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ImageBackground
-          source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
-          style={styles.background}
-        >
-          <View style={styles.container}>
-            <ActivityIndicator size="large" color="#fff" />
-            <Text style={styles.loadingText}>Inicializando...</Text>
-          </View>
-        </ImageBackground>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -88,143 +45,146 @@ export default function InicioSesionScreen({ navigation }) {
         source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
         style={styles.background}
       >
-        <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.container}>
+          <View style={styles.logoBg}>
+            <Image
+              source={require('../assets/lAhorra-logo.jpg')} 
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
+          
+          <Text style={styles.title}>INICIAR SESIÓN</Text>
 
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Correo electrónico"
+              placeholderTextColor="#888" 
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={correo}
+              onChangeText={setCorreo}
+            />
 
-          <Image
-            source={require('../assets/logoSinfondo.png')}
-            style={styles.logo}
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Ingresar correo electrónico"
-            placeholderTextColor="#ddd"
-            value={correo}
-            onChangeText={setCorreo}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Ingresar contraseña"
-            placeholderTextColor="#ddd"
-            secureTextEntry
-            value={contrasena}
-            onChangeText={setContrasena}
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Contraseña"
+              placeholderTextColor="#888"
+              secureTextEntry
+              value={contrasena}
+              onChangeText={setContrasena}
+            />
+          </View>
 
           <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleAcceder}
-            disabled={loading}
+            style={styles.button}
             activeOpacity={0.8}
+            onPress={handleAcceder}
+            disabled={cargando}
           >
-            {loading ? (
+            {cargando ? (
               <ActivityIndicator color="#fff" />
             ) : (
               <Text style={styles.buttonText}>ACCEDER</Text>
             )}
           </TouchableOpacity>
-        
+
           <TouchableOpacity 
             onPress={() => navigation.navigate('RecuperarContrasena')}
             style={{ marginBottom: 20 }}
           >
-            <Text style={{ color: '#fff', textDecorationLine: 'underline' }}>
-              ¿Olvidaste tu contraseña?
-            </Text>
+             <Text style={styles.linkText}>¿Olvidaste tu contraseña?</Text>
           </TouchableOpacity>
-    
-
-          <Text style={styles.textoCuenta}>¿Aún no tienes cuenta?</Text>
-
-          <TouchableOpacity onPress={handleRegistrar}>
-            <Text style={styles.registrar}>REGISTRARSE</Text>
-          </TouchableOpacity>
-
-        </ScrollView>
+      
+          <View style={styles.footerContainer}>
+            <Text style={styles.textoCuenta}>¿Aun no tienes cuenta?</Text>
+            <TouchableOpacity onPress={handleRegistrar}>
+              <Text style={styles.registrar}>REGISTRARSE</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </ImageBackground>
     </SafeAreaView>
   );
 }
 
-
-// ESTILOS EXACTAMENTE COMO TU REGISTRO
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: "cover",
+    resizeMode: 'cover',
   },
   container: {
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 25,
-    paddingTop: 50,
-    paddingBottom: 80
+    backgroundColor: 'rgba(21, 41, 124, 0.75)', // Fondo unificado
   },
-  skipButton: {
-    position: "absolute",
-    top: 40,
-    right: 20,
-    backgroundColor: "rgba(3,169,244,0.8)",
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 15,
-  },
-  skipButtonText: {
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "bold",
+  logoBg: {
+  
+    padding: 10,
+    borderRadius: 20,
+    marginBottom: 30,
   },
   logo: {
-    width: 250,
-    height: 100,
-    resizeMode: "contain",
-    marginBottom: 35,
+    width: 200,
+    height: 80,
   },
-  input: {
-    width: "100%",
-    backgroundColor: "rgba(255,255,255,0.15)",
-    padding: 15,
-    borderRadius: 25,
-    color: "#fff",
-    marginBottom: 20,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)"
-  },
-  button: {
-    backgroundColor: "#4c7c3f",
-    paddingVertical: 15,
-    width: "100%",
-    borderRadius: 25,
-    alignItems: "center",
-    marginBottom: 25,
-  },
-  buttonDisabled: {
-    opacity: 0.6
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 30,
     letterSpacing: 1,
   },
-  textoCuenta: {
-    color: "#fff",
+  inputContainer: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  input: {
+    width: '100%',
+    height: 55,
+    backgroundColor: '#fff', // Fondo blanco sólido
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    fontSize: 16,
+    color: '#333', // Texto oscuro
+    marginBottom: 20,
+    elevation: 3,
+  },
+  button: {
+    width: '100%',
+    backgroundColor: '#4c7c3f',
+    borderRadius: 25,
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+    elevation: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  linkText: {
+    color: '#ddd', 
+    textDecorationLine: 'underline',
     fontSize: 14,
   },
-  registrar: {
-    color: "#fff",
-    fontWeight: "bold",
-    marginTop: 5,
-    fontSize: 16,
-  },
-  loadingText: {
-    color: "#fff",
-    fontSize: 16,
+  footerContainer: {
+    alignItems: 'center',
     marginTop: 10,
-  }
+  },
+  textoCuenta: {
+    color: '#fff',
+    fontSize: 15,
+  },
+  registrar: {
+    color: '#03A9F4', // Azul cyan
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
 });

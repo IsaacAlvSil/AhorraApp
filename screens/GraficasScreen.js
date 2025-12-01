@@ -17,7 +17,7 @@ export default function GraficasScreen({ navigation }) {
 
   return (
     <ImageBackground
-      source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
+      source={require('../assets/fondo.png')} 
       style={styles.background}
     >
       <ScrollView contentContainerStyle={{ paddingTop: 60, paddingBottom: 40 }}>
