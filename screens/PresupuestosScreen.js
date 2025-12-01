@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Text, StyleSheet, View, TextInput, TouchableOpacity, 
-  ImageBackground, Alert, ScrollView, FlatList 
+  ImageBackground, Alert, ScrollView, FlatList, ActivityIndicator 
 } from 'react-native';
 
+// Asegúrate que estas rutas sean correctas en tu proyecto
 import { initDB } from '../database/db';
 import { PresupuestoController } from '../controllers/PresupuestoController';
 
@@ -26,25 +27,15 @@ export default function PresupuestosScreen({ navigation }) {
   const cargarDatos = async () => {
     const datos = await PresupuestoController.obtenerLista();
     setListaPresupuestos(datos);
-  const handleIngresarDinero = () => {
-    const cantidad = parseFloat(monto);
-    if (isNaN(cantidad) || cantidad <= 0) {
-      Alert.alert('Error', 'Por favor, introduce un monto válido y mayor a cero.');
-      return;
-    } 
-    
-    Alert.alert(
-      '¡Ingreso Exitoso!',
-      `Has ingresado $${cantidad.toFixed(2)} a tu saldo. Nota: ${nota || 'N/A'}`,
-      [
-        { text: "OK", onPress: () => navigation.goBack() } 
-      ] 
-    );
-    setMonto('');
-    setNota('');
-  };
+  }; // <--- AQUÍ FALTABA CERRAR LA LLAVE EN TU CÓDIGO ORIGINAL
 
   const handleGuardar = async () => {
+    // Validación simple
+    if (!monto || parseFloat(monto) <= 0) {
+      Alert.alert('Error', 'Por favor ingresa un monto válido');
+      return;
+    }
+
     try {
       if (modoEdicion) {
         await PresupuestoController.editarPresupuesto(idEditar, monto, nota);
@@ -58,7 +49,7 @@ export default function PresupuestosScreen({ navigation }) {
       
       setMonto('');
       setNota('');
-      cargarDatos();
+      cargarDatos(); // Recargar la lista
 
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -70,6 +61,13 @@ export default function PresupuestosScreen({ navigation }) {
     setNota(item.nota);
     setIdEditar(item.id);
     setModoEdicion(true);
+  };
+
+  const cancelarEdicion = () => {
+    setModoEdicion(false);
+    setIdEditar(null);
+    setMonto('');
+    setNota('');
   };
 
   const handleEliminar = (id) => {
@@ -92,7 +90,7 @@ export default function PresupuestosScreen({ navigation }) {
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <View style={styles.infoContainer}>
-        <Text style={styles.itemMonto}>$ {item.monto.toFixed(2)}</Text>
+        <Text style={styles.itemMonto}>$ {parseFloat(item.monto).toFixed(2)}</Text>
         <Text style={styles.itemNota}>{item.nota || 'Sin nota'}</Text>
       </View>
       <View style={styles.accionesContainer}>
@@ -111,162 +109,121 @@ export default function PresupuestosScreen({ navigation }) {
       source={require('../assets/fondo.png')} 
       style={styles.background}
     >
-      <View style={styles.mainContainer}>
-        
+      <View style={styles.overlay}>
         <ScrollView contentContainerStyle={styles.scrollContent}>
-          <View style={styles.container}>
-            <Text style={styles.titulo}>Gestión de Ahorros</Text>
-            
-            <View style={styles.cajaPresupuesto}>
-              <Text style={styles.textoIntro}>
-                {modoEdicion ? 'Editando Registro' : '¡Aumenta tu inversión o saldo!'}
-              </Text>
-              
-              <Text style={styles.texto}>Monto</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="$ 0.00"
-                placeholderTextColor="#777"
-                value={monto}
-                onChangeText={setMonto}
-                keyboardType="numeric"
-              />
-
-              <Text style={styles.texto}>Nota</Text>
-              <TextInput
-                style={[styles.input, styles.inputNota]}
-                placeholder="Descripción..."
-                placeholderTextColor="#777"
-                value={nota}
-                onChangeText={setNota}
-                multiline={true}
-              />
-
-              <TouchableOpacity
-                style={[styles.boton, modoEdicion && styles.botonEditar]}
-                activeOpacity={0.8}
-                onPress={handleGuardar}
-              >
-                <Text style={styles.botonTexto}>
-                  {modoEdicion ? 'Actualizar Cambios' : 'Ingresar Dinero'}
-                </Text>
-              </TouchableOpacity>
-
-              {modoEdicion && (
-                <TouchableOpacity onPress={() => {
-                  setModoEdicion(false);
-                  setMonto('');
-                  setNota('');
-                }}>
-                  <Text style={styles.cancelarTexto}>Cancelar Edición</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          </View>
           
-          <Text style={styles.subtitulo}>Historial de Movimientos</Text>
-          <View style={styles.listaContainer}>
-            <FlatList
-              data={listaPresupuestos}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={renderItem}
-              scrollEnabled={false}
-            />
-          </View>
-        </ScrollView>
-      </View>
-        
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View style={styles.container}>
+          <Text style={styles.titulo}>Gestión de Ahorros</Text>
+          
+          {/* --- FORMULARIO DE INGRESO --- */}
+          <View style={styles.cajaPresupuesto}>
+            <Text style={styles.textoIntro}>
+              {modoEdicion ? 'Editando Registro' : '¡Aumenta tu saldo!'}
+            </Text>
             
-                <Text style={styles.titulo}>Ingresar Dinero</Text>
-                
-                <View style={styles.cajaPresupuesto}>
-                    <Text style={styles.textoIntro}>¡Aumenta tu saldo!</Text>
-                    
-                    <Text style={styles.label}>Monto a Ingresar</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="$ 0.00"
-                        placeholderTextColor="#999"
-                        value={monto}
-                        onChangeText={setMonto}
-                        keyboardType="numeric"
-                    />
+            <Text style={styles.label}>Monto</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="$ 0.00"
+              placeholderTextColor="#999"
+              value={monto}
+              onChangeText={setMonto}
+              keyboardType="numeric"
+            />
 
-                    <Text style={styles.label}>Concepto o Nota (Opcional)</Text>
-                    <TextInput
-                        style={[styles.input, styles.inputNota]}
-                        placeholder="Ej: Inversión adicional"
-                        placeholderTextColor="#999"
-                        value={nota}
-                        onChangeText={setNota}
-                        multiline={true}
-                        numberOfLines={4}
-                    />
+            <Text style={styles.label}>Nota (Opcional)</Text>
+            <TextInput
+              style={[styles.input, styles.inputNota]}
+              placeholder="Descripción..."
+              placeholderTextColor="#999"
+              value={nota}
+              onChangeText={setNota}
+              multiline={true}
+            />
 
-                    <TouchableOpacity
-                        style={styles.boton}
-                        activeOpacity={0.8}
-                        onPress={handleIngresarDinero}
-                    >
-                        <Text style={styles.botonTexto}>Confirmar Ingreso</Text>
-                    </TouchableOpacity>
-                </View>
+            <TouchableOpacity
+              style={[styles.boton, modoEdicion && styles.botonEditar]}
+              activeOpacity={0.8}
+              onPress={handleGuardar}
+            >
+              <Text style={styles.botonTexto}>
+                {modoEdicion ? 'Actualizar Cambios' : 'Ingresar Dinero'}
+              </Text>
+            </TouchableOpacity>
 
+            {modoEdicion && (
+              <TouchableOpacity onPress={cancelarEdicion}>
+                <Text style={styles.cancelarTexto}>Cancelar Edición</Text>
+              </TouchableOpacity>
+            )}
+
+            {!modoEdicion && (
                 <TouchableOpacity 
                     style={styles.botonVolver} 
                     onPress={() => navigation.goBack()}
                 >
-                    <Text style={styles.botonVolverTexto}>Cancelar</Text>
+                    <Text style={styles.botonVolverTexto}>Volver</Text>
                 </TouchableOpacity>
+            )}
+          </View>
+          
+          {/* --- HISTORIAL (LISTA) --- */}
+          <Text style={styles.subtitulo}>Historial de Movimientos</Text>
+          
+          <View style={styles.listaContainer}>
+            {listaPresupuestos.length === 0 ? (
+                <Text style={{color: 'white', textAlign: 'center'}}>No hay registros aún.</Text>
+            ) : (
+                <FlatList
+                data={listaPresupuestos}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderItem}
+                scrollEnabled={false} // Importante porque está dentro de un ScrollView
+                />
+            )}
+          </View>
 
-            </View>
         </ScrollView>
+      </View>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  background: { flex: 1, resizeMode: 'cover' },
-  mainContainer: { flex: 1, backgroundColor: 'rgba(27, 40, 181, 0.4)' },
-  scrollContent: { paddingVertical: 40, paddingBottom: 100 },
-  container: { alignItems: 'center', paddingHorizontal: 20 },
-  titulo: { color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 20, textAlign: 'center' },
-  subtitulo: { color: '#fff', fontSize: 22, fontWeight: 'bold', marginTop: 30, marginBottom: 10, textAlign: 'center' },
-  
-  cajaPresupuesto: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    borderRadius: 25, padding: 25, width: '100%',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3, shadowRadius: 10,
   background: {
     flex: 1,
     resizeMode: 'cover',
   },
-  scrollContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    paddingVertical: 60,
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(27, 40, 181, 0.4)', // Tu filtro azul
   },
-  container: {
-    alignItems: 'center',
+  scrollContent: {
+    paddingVertical: 40,
     paddingHorizontal: 20,
+    paddingBottom: 100,
   },
   titulo: {
     color: '#fff',
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 30,
+    marginBottom: 20,
     textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
+    textShadowRadius: 5,
+  },
+  subtitulo: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginTop: 30,
+    marginBottom: 15,
+    textAlign: 'center',
   },
   cajaPresupuesto: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     borderRadius: 25,
-    padding: 30,
+    padding: 25,
     width: '100%',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 5 },
@@ -276,86 +233,111 @@ const styles = StyleSheet.create({
   },
   textoIntro: {
     color: '#15297c',
-    fontSize: 20,
-    marginBottom: 25,
+    fontSize: 18,
+    marginBottom: 20,
     textAlign: 'center',
     fontWeight: 'bold',
   },
   label: {
     color: '#15297c',
     fontSize: 14,
-    marginBottom: 8,
     fontWeight: '600',
+    marginBottom: 5,
     marginLeft: 5,
   },
-  textoIntro: { color: '#15297c', fontSize: 18, marginBottom: 20, textAlign: 'center', fontWeight: 'bold' },
-  texto: { color: '#333', fontSize: 14, marginBottom: 5, fontWeight: '600' },
   input: {
-    width: '100%', borderWidth: 1, borderColor: '#ccc', borderRadius: 10,
-    paddingHorizontal: 15, paddingVertical: 10, marginBottom: 15,
-    backgroundColor: '#fff', fontSize: 16,
-  },
-  inputNota: { height: 60, textAlignVertical: 'top' },
-  
-  boton: { backgroundColor: '#4c7c3f', paddingVertical: 15, borderRadius: 20, alignItems: 'center', marginTop: 10 },
-  botonEditar: { backgroundColor: '#e67e22' },
-  botonTexto: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
-  cancelarTexto: { color: '#e74c3c', textAlign: 'center', marginTop: 15, fontWeight: 'bold' },
-
-  listaContainer: { paddingHorizontal: 20 },
-  itemContainer: {
-    backgroundColor: 'rgba(255,255,255,0.9)',
-    borderRadius: 15, padding: 15, marginBottom: 10,
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-  },
-  infoContainer: { flex: 1 },
-  itemMonto: { fontSize: 18, fontWeight: 'bold', color: '#2c3e50' },
-  itemNota: { fontSize: 14, color: '#7f8c8d' },
-  accionesContainer: { flexDirection: 'row', gap: 10 },
-  btnEditar: { backgroundColor: '#f39c12', padding: 8, borderRadius: 8 },
-  btnEliminar: { backgroundColor: '#c0392b', padding: 8, borderRadius: 8 },
-  btnTextoSm: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
     width: '100%',
-    backgroundColor: '#f0f2f5', 
-    borderRadius: 15,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    marginBottom: 20,
-    color: '#333',
-    fontSize: 16,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: '#ccc',
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginBottom: 15,
+    backgroundColor: '#fff',
+    fontSize: 16,
+    color: '#333',
   },
   inputNota: {
-    height: 100,
+    height: 80,
     textAlignVertical: 'top',
   },
   boton: {
     backgroundColor: '#4c7c3f',
     paddingVertical: 15,
-    borderRadius: 25,
+    borderRadius: 20,
     alignItems: 'center',
     marginTop: 10,
     shadowColor: '#000',
     shadowOpacity: 0.2,
-    shadowRadius: 5,
+    shadowRadius: 3,
     elevation: 3,
+  },
+  botonEditar: {
+    backgroundColor: '#e67e22',
   },
   botonTexto: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
+  cancelarTexto: {
+    color: '#e74c3c',
+    textAlign: 'center',
+    marginTop: 15,
+    fontWeight: 'bold',
+  },
   botonVolver: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    borderRadius: 20,
-    paddingHorizontal: 20,
+    marginTop: 15,
+    alignItems: 'center',
   },
   botonVolverTexto: {
-      color: '#fff',
-      fontSize: 16,
-      fontWeight: '600',
-  }
-})};
+    color: '#555',
+    textDecorationLine: 'underline',
+  },
+  // Estilos de la Lista
+  listaContainer: {
+    width: '100%',
+  },
+  itemContainer: {
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  infoContainer: {
+    flex: 1,
+  },
+  itemMonto: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2c3e50',
+  },
+  itemNota: {
+    fontSize: 14,
+    color: '#7f8c8d',
+  },
+  accionesContainer: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  btnEditar: {
+    backgroundColor: '#f39c12',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  btnEliminar: {
+    backgroundColor: '#c0392b',
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  btnTextoSm: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+});
