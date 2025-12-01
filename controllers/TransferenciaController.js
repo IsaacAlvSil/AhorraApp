@@ -1,5 +1,6 @@
 import { TransaccionModel } from '../models/TransaccionModel';
 import { PresupuestoController } from './PresupuestoController'; 
+import { NotificacionModel } from '../models/NotificacionModel';
 
 export const TransferenciaController = {
   guardarTransferencia: async (monto, destinatario, concepto) => {
@@ -20,6 +21,10 @@ export const TransferenciaController = {
       }
 
       await TransaccionModel.crear(cantidad, destinatario, concepto);
+
+      const mensajeNotificacion = `Enviaste $${cantidad.toFixed(2)} a ${destinatario}.`;
+      await NotificacionModel.crear('Transferencia Exitosa', mensajeNotificacion);
+
       return true;
 
     } catch (error) {

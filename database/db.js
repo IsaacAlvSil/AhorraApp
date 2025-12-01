@@ -14,6 +14,15 @@ export const initDB = async () => {
       fecha TEXT
     );
 
+    -- NUEVA Tabla de Notificaciones
+    CREATE TABLE IF NOT EXISTS notificaciones (
+      id INTEGER PRIMARY KEY NOT NULL, 
+      titulo TEXT, 
+      mensaje TEXT, 
+      fecha TEXT,
+      leido INTEGER DEFAULT 0
+    );
+
     -- NUEVA Tabla de Transacciones
     CREATE TABLE IF NOT EXISTS transacciones (
       id INTEGER PRIMARY KEY NOT NULL, 

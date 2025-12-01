@@ -1,77 +1,59 @@
-import React from "react";
-import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
+import React, { useState, useCallback } from 'react';
+import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { NotificacionModel } from '../models/NotificacionModel';
 
 export default function NotificacionesScreen({ navigation }) {
-  const notificaciones = [
-    { 
-      id: "1", 
-      titulo: "Meta de ahorro alcanzada", 
-      mensaje: "¡Felicidades! Has alcanzado tu meta de Viaje a Japón", 
-      fecha: "Hace 2 horas",
-      leida: false
-    },
-    { 
-      id: "2", 
-      titulo: "Recordatorio de pago", 
-      mensaje: "Tu pago de renta vence en 3 días", 
-      fecha: "Hace 1 día",
-      leida: true
-    },
-    { 
-      id: "3", 
-      titulo: "Transferencia recibida", 
-      mensaje: "Has recibido $1,500.00 de Juan Pérez", 
-      fecha: "Hace 2 días",
-      leida: true
-    },
-    { 
-      id: "4", 
-      titulo: "Límite de presupuesto", 
-      mensaje: "Estás cerca de alcanzar tu límite de gastos en 'Comida'", 
-      fecha: "Hace 3 días",
-      leida: true
-    },
-    { 
-      id: "5", 
-      titulo: "Nueva funcionalidad", 
-      mensaje: "Ya puedes usar las gráficas de análisis mensual", 
-      fecha: "Hace 1 semana",
-      leida: true
-    },
-  ];
+  const [notificaciones, setNotificaciones] = useState([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      cargarNotificaciones();
+    }, [])
+  );
+
+  const cargarNotificaciones = async () => {
+    try {
+      const datos = await NotificacionModel.obtenerTodas();
+      setNotificaciones(datos);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBorrar = async (id) => {
+    await NotificacionModel.eliminar(id);
+    cargarNotificaciones();
+  };
 
   const renderItem = ({ item }) => (
-    <View style={[styles.card, !item.leida && styles.cardNoLeida]}>
-      <View style={styles.notificacionHeader}>
-        <Text style={styles.tituloNotificacion}>{item.titulo}</Text>
-        {!item.leida && <View style={styles.puntoNoLeido} />}
+    <View style={styles.item}>
+      <View style={{flex: 1}}>
+        <Text style={styles.titulo}>{item.titulo}</Text>
+        <Text style={styles.mensaje}>{item.mensaje}</Text>
+        <Text style={styles.fecha}>{new Date(item.fecha).toLocaleDateString()} - {new Date(item.fecha).toLocaleTimeString()}</Text>
       </View>
-      <Text style={styles.mensajeNotificacion}>{item.mensaje}</Text>
-      <Text style={styles.fechaNotificacion}>{item.fecha}</Text>
+      <TouchableOpacity onPress={() => handleBorrar(item.id)} style={styles.btnBorrar}>
+        <Text style={{color: 'white', fontWeight: 'bold'}}>X</Text>
+      </TouchableOpacity>
     </View>
   );
 
   return (
-    <ImageBackground
+    <ImageBackground 
       source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
-      style={styles.background}
+      style={styles.fondo}
     >
       <View style={styles.overlay}>
-        <Text style={styles.titulo}>Notificaciones</Text>
-        
+        <Text style={styles.header}>Notificaciones</Text>
         <FlatList
           data={notificaciones}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
-          contentContainerStyle={styles.listaContainer}
-          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={<Text style={styles.vacio}>No tienes notificaciones nuevas</Text>}
         />
-
-        <TouchableOpacity 
-          style={styles.botonVolver} 
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.botonVolverTexto}>← Volver</Text>
+        <TouchableOpacity style={styles.volver} onPress={() => navigation.goBack()}>
+          <Text style={styles.textoVolver}>Volver</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>
@@ -79,88 +61,18 @@ export default function NotificacionesScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  background: { 
-    flex: 1, 
-    resizeMode: "cover" 
+  fondo: { flex: 1, resizeMode: 'cover' },
+  overlay: { flex: 1, backgroundColor: 'rgba(21, 41, 124, 0.8)', padding: 20, paddingTop: 50 },
+  header: { fontSize: 28, fontWeight: 'bold', color: 'white', marginBottom: 20, textAlign: 'center' },
+  item: { 
+    backgroundColor: 'white', padding: 15, borderRadius: 10, marginBottom: 10, 
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
   },
-  overlay: { 
-    flex: 1, 
-    backgroundColor: 'rgba(21, 41, 124, 0.7)', 
-    alignItems: 'center', 
-    paddingTop: 60, 
-    paddingHorizontal: 20 
-  },
-  titulo: { 
-    fontSize: 26, 
-    fontWeight: "bold", 
-    color: "#fff", 
-    marginBottom: 25, 
-    textAlign: "center" 
-  },
-  listaContainer: { 
-    width: "100%", 
-    paddingBottom: 40 
-  },
-  card: { 
-    backgroundColor: "#fff", // Blanco sólido
-    width: "100%", 
-    borderRadius: 20, 
-    padding: 20, 
-    marginBottom: 15, 
-    shadowColor: '#000', 
-    shadowOpacity: 0.1, 
-    shadowRadius: 4, 
-    elevation: 3 
-  },
-  cardNoLeida: {
-    backgroundColor: "#f9fcf9", // Un verde muy muy clarito
-    borderLeftWidth: 5,
-    borderLeftColor: "#4c7c3f"
-  },
-  notificacionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 8
-  },
-  tituloNotificacion: { 
-    fontSize: 16, 
-    fontWeight: 'bold', 
-    color: '#15297c', 
-    flex: 1 
-  },
-  puntoNoLeido: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: "#4c7c3f"
-  },
-  mensajeNotificacion: { 
-    fontSize: 14, 
-    color: '#555', 
-    marginBottom: 8,
-    lineHeight: 20
-  },
-  fechaNotificacion: {
-    fontSize: 12,
-    color: '#999',
-    fontStyle: 'italic',
-    alignSelf: 'flex-end'
-  },
-  botonVolver: { 
-    backgroundColor: 'rgba(255,255,255,0.2)', 
-    paddingVertical: 15, 
-    width: '90%', 
-    borderRadius: 25, 
-    alignItems: 'center', 
-    marginTop: 10,
-    marginBottom: 30,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)'
-  },
-  botonVolverTexto: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold'
-  }
+  titulo: { fontWeight: 'bold', fontSize: 16, color: '#15297c' },
+  mensaje: { color: '#555', marginTop: 2 },
+  fecha: { color: '#999', fontSize: 11, marginTop: 5 },
+  vacio: { color: 'white', textAlign: 'center', marginTop: 50, fontStyle: 'italic' },
+  btnBorrar: { backgroundColor: '#c0392b', padding: 10, borderRadius: 5, marginLeft: 10 },
+  volver: { padding: 15, alignItems: 'center', marginTop: 10 },
+  textoVolver: { color: 'white', fontWeight: 'bold', textDecorationLine: 'underline' }
 });
