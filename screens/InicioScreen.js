@@ -1,7 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
-// 1. Importamos los iconos
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  ImageBackground, 
+  ScrollView, 
+  TouchableOpacity, 
+  SafeAreaView, 
+  Dimensions 
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; 
+
+const { width } = Dimensions.get('window');
 
 export default function InicioScreen({ navigation }) { 
 
@@ -10,148 +20,258 @@ export default function InicioScreen({ navigation }) {
   const handleIrATransferir = () => navigation.navigate('TransferirScreen');
   const handleIrANotificaciones = () => navigation.navigate('NotificacionesScreen');
 
-  // Función para ir a la nueva pantalla de Ajustes
   const handleIrAAjustes = () => {
-    navigation.navigate('Ajustes'); // Asegúrate de registrar esta pantalla en App.js
+    navigation.navigate('Ajustes');
   }
 
   return (
-    <ImageBackground
-      source={require('../assets/fondo.png')}
-      style={styles.fondo}
-    >
-      <View style={styles.overlay}>
-        
-        {/* 2. Botón de Ajustes en la esquina superior derecha */}
-        <SafeAreaView style={styles.topBar}>
-            <TouchableOpacity style={styles.btnAjustes} onPress={handleIrAAjustes}>
-                <Ionicons name="settings-outline" size={28} color="white" />
-            </TouchableOpacity>
-        </SafeAreaView>
-
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          
-          <Text style={styles.titulo}>Inicio</Text>
-          
-          <View style={styles.card}>
-            <Text style={styles.cardTitulo}>Tu Saldo Actual</Text>
-            <Text style={styles.saldo}>$14,892.50</Text>
-            <Text style={styles.cambio}>+ $500.45 este mes</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.cardTitulo}>Metas de Ahorro</Text>
-            <Text style={styles.meta}>Viaje a Japón — $5,000 / $8,000</Text>
-            <Text style={styles.meta}>Apartados — $8,500 / $10,000</Text>
-            <Text style={styles.meta}>Fondo Emergencia — $2,800 / $5,000</Text>
-          </View>
-
-          <View style={styles.botonesContainer}>
-            <TouchableOpacity style={styles.botonAccion} onPress={handleIrAInversion}>
-              <Text style={styles.botonTexto}>Invertir</Text>
-            </TouchableOpacity>
+    <View style={styles.mainContainer}>
+      <ImageBackground
+        source={require('../assets/fondo.png')}
+        style={styles.fondo}
+      >
+        {/* Capa oscura simple para que las letras blancas se lean bien */}
+        <View style={styles.overlay}>
+            <SafeAreaView style={styles.safeArea}>
             
-            <TouchableOpacity style={styles.botonAccion} onPress={handleIrAMetas}>
-              <Text style={styles.botonTexto}>Metas</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.botonAccion} onPress={handleIrATransferir}>
-              <Text style={styles.botonTexto}>Transferir</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.botonAccion} onPress={handleIrANotificaciones}>
-              <Text style={styles.botonTexto}>Notificaciones</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-    </ImageBackground>
+            {/* 1. Encabezado Simple */}
+            <View style={styles.header}>
+                <View>
+                    <Text style={styles.saludo}>Hola, Usuario</Text>
+                </View>
+                <TouchableOpacity onPress={handleIrAAjustes} style={styles.botonAjustes}>
+                    <Ionicons name="settings-outline" size={26} color="#fff" />
+                </TouchableOpacity>
+            </View>
+
+            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+                
+                {/* 2. Tarjeta de Saldo (Limpia y Blanca) */}
+                <View style={styles.cardSaldo}>
+                    <Text style={styles.tituloSaldo}>Saldo Disponible</Text>
+                    <Text style={styles.montoSaldo}>$14,892.50</Text>
+                    
+                    <View style={styles.indicadorCambio}>
+                        <Ionicons name="arrow-up" size={16} color="#4c7c3f" />
+                        <Text style={styles.textoCambio}> +$500.45 este mes</Text>
+                    </View>
+                </View>
+
+                {/* 3. Botones (Sencillos y directos) */}
+                <Text style={styles.seccionTitulo}>Acciones</Text>
+                <View style={styles.gridBotones}>
+                    <BotonSimple 
+                        icon="trending-up" 
+                        text="Invertir" 
+                        onPress={handleIrAInversion} 
+                    />
+                    <BotonSimple 
+                        icon="flag" 
+                        text="Metas" 
+                        onPress={handleIrAMetas} 
+                    />
+                    <BotonSimple 
+                        icon="swap-horizontal" 
+                        text="Transferir" 
+                        onPress={handleIrATransferir} 
+                    />
+                    <BotonSimple 
+                        icon="notifications" 
+                        text="Avisos" 
+                        onPress={handleIrANotificaciones} 
+                    />
+                </View>
+
+                {/* 4. Lista de Metas (Estilo Lista Clásica) */}
+                <Text style={styles.seccionTitulo}>Mis Metas</Text>
+                <View style={styles.listaMetas}>
+                    <FilaMeta titulo="Viaje a Japón" monto="$5,000 / $8,000" color="#FF5252" />
+                    <View style={styles.separador} />
+                    <FilaMeta titulo="Apartados" monto="$8,500 / $10,000" color="#448AFF" />
+                    <View style={styles.separador} />
+                    <FilaMeta titulo="Fondo Emergencia" monto="$2,800 / $5,000" color="#4CAF50" />
+                </View>
+
+                <View style={{height: 50}} /> 
+            </ScrollView>
+            </SafeAreaView>
+        </View>
+      </ImageBackground>
+    </View>
   );
 }
 
+// Componente pequeño para los botones cuadrados
+const BotonSimple = ({ icon, text, onPress }) => (
+    <TouchableOpacity style={styles.botonCaja} onPress={onPress} activeOpacity={0.7}>
+        <View style={styles.circuloIcono}>
+            <Ionicons name={icon} size={24} color="#15297c" />
+        </View>
+        <Text style={styles.textoBoton}>{text}</Text>
+    </TouchableOpacity>
+);
+
+// Componente pequeño para las filas de metas
+const FilaMeta = ({ titulo, monto, color }) => (
+    <View style={styles.filaMeta}>
+        <View style={[styles.puntoColor, { backgroundColor: color }]} />
+        <View style={{flex: 1}}>
+            <Text style={styles.tituloMeta}>{titulo}</Text>
+            <Text style={styles.montoMeta}>{monto}</Text>
+        </View>
+    </View>
+);
+
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
   fondo: {
     flex: 1,
     resizeMode: 'cover',
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(21, 41, 124, 0.7)',
+    backgroundColor: 'rgba(21, 41, 124, 0.8)', // Azul oscuro simple, sin degradados
   },
-  // Estilos nuevos para el botón superior
-  topBar: {
-    width: '100%',
-    alignItems: 'flex-end',
-    paddingRight: 20,
-    marginTop: 10, 
-  },
-  btnAjustes: {
-    padding: 10,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 50,
+  safeArea: {
+    flex: 1,
   },
   scrollContainer: {
-    alignItems: 'center',
-    paddingBottom: 40,
     paddingHorizontal: 20,
-    // marginTop quitado para usar SafeAreaView y topBar
+    paddingTop: 10,
   },
-  titulo: {
-    fontSize: 28,
-    color: 'white',
+  
+  // Header
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 15,
+    marginBottom: 20,
+  },
+  saludo: {
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 25,
-    marginTop: 10,
+    color: '#fff',
   },
-  card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)', // Un poco más sólido para legibilidad
-    width: '100%',
+  botonAjustes: {
+    padding: 5,
+  },
+
+  // Tarjeta Saldo (Diseño limpio)
+  cardSaldo: {
+    backgroundColor: '#fff',
     borderRadius: 15,
     padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
+    width: '100%',
+    marginBottom: 25,
+    // Sombra muy sutil, casi imperceptible
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 3,
   },
-  cardTitulo: {
+  tituloSaldo: {
+    color: '#666',
+    fontSize: 14,
+    marginBottom: 5,
+    fontWeight: '500',
+  },
+  montoSaldo: {
+    color: '#15297c', // Tu color azul corporativo
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  indicadorCambio: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f9f0', // Verde muy clarito de fondo
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  textoCambio: {
+    color: '#4c7c3f',
+    fontSize: 13,
+    fontWeight: 'bold',
+  },
+
+  // Títulos
+  seccionTitulo: {
+    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#15297c',
-    marginBottom: 10,
+    marginBottom: 15,
   },
-  saldo: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4c7c3f',
+
+  // Grid de Botones
+  gridBotones: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+  },
+  botonCaja: {
+    backgroundColor: 'rgba(255,255,255,0.15)', // Transparente sutil
+    width: (width - 60) / 4,
+    height: 80,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.2)',
+  },
+  circuloIcono: {
+    backgroundColor: '#fff',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 5,
   },
-  cambio: {
-    fontSize: 14,
-    color: '#666',
+  textoBoton: {
+    color: '#fff',
+    fontSize: 11,
+    fontWeight: '600',
   },
-  meta: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 8,
+
+  // Lista Metas
+  listaMetas: {
+    backgroundColor: '#fff',
+    borderRadius: 15,
+    padding: 5,
+    paddingVertical: 10,
   },
-  botonesContainer: {
+  filaMeta: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginBottom: 20,
-  },
-  botonAccion: {
-    backgroundColor: '#03A9F4',
-    padding: 15,
-    borderRadius: 10,
-    width: '48%',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
   },
-  botonTexto: {
-    color: 'white',
+  puntoColor: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 15,
+  },
+  tituloMeta: {
+    color: '#333',
+    fontSize: 15,
     fontWeight: 'bold',
+  },
+  montoMeta: {
+    color: '#666',
+    fontSize: 13,
+  },
+  separador: {
+    height: 1,
+    backgroundColor: '#f0f0f0',
+    marginLeft: 40, 
+    marginRight: 15,
   },
 });
