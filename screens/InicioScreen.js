@@ -1,14 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
-// 1. Importamos el hook que detecta el foco
 import { useFocusEffect } from '@react-navigation/native';
-// 2. Importamos el controlador (asumiendo que InicioScreen está dentro de una carpeta 'screens')
 import { PresupuestoController } from '../controllers/PresupuestoController';
 
 export default function InicioScreen({ navigation }) { 
   const [saldoTotal, setSaldoTotal] = useState(0);
 
-  // useFocusEffect se ejecuta CADA VEZ que esta pantalla aparece en el celular
   useFocusEffect(
     useCallback(() => {
       console.log("🔄 Pantalla Inicio enfocada: Recargando saldo...");
@@ -19,10 +16,10 @@ export default function InicioScreen({ navigation }) {
   const cargarSaldo = async () => {
     try {
       const total = await PresupuestoController.calcularSaldoTotal();
-      console.log("💰 Saldo recibido de la BD:", total);
+      console.log("Saldo recibido de la BD:", total);
       setSaldoTotal(total);
     } catch (error) {
-      console.error("❌ Error al cargar el saldo:", error);
+      console.error("Error al cargar el saldo:", error);
     }
   };
 
@@ -43,7 +40,6 @@ export default function InicioScreen({ navigation }) {
   }
 
   const formatoMoneda = (cantidad) => {
-    // Si la cantidad es 0 o nula, mostramos $0.00
     if (!cantidad) return '$0.00';
     return '$' + parseFloat(cantidad).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   };
@@ -60,7 +56,6 @@ export default function InicioScreen({ navigation }) {
           
           <View style={styles.card}>
             <Text style={styles.cardTitulo}>Tu Saldo Actual</Text>
-            {/* Aquí se muestra el saldo actualizado */}
             <Text style={styles.saldo}>{formatoMoneda(saldoTotal)}</Text>
             <Text style={styles.cambio}>Total acumulado disponible</Text>
           </View>

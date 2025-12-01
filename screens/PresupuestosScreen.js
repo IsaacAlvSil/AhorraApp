@@ -4,7 +4,6 @@ import {
   ImageBackground, Alert, ScrollView, FlatList, ActivityIndicator 
 } from 'react-native';
 
-// Asegúrate que estas rutas sean correctas en tu proyecto
 import { initDB } from '../database/db';
 import { PresupuestoController } from '../controllers/PresupuestoController';
 
@@ -27,10 +26,9 @@ export default function PresupuestosScreen({ navigation }) {
   const cargarDatos = async () => {
     const datos = await PresupuestoController.obtenerLista();
     setListaPresupuestos(datos);
-  }; // <--- AQUÍ FALTABA CERRAR LA LLAVE EN TU CÓDIGO ORIGINAL
+  };
 
   const handleGuardar = async () => {
-    // Validación simple
     if (!monto || parseFloat(monto) <= 0) {
       Alert.alert('Error', 'Por favor ingresa un monto válido');
       return;
@@ -49,7 +47,7 @@ export default function PresupuestosScreen({ navigation }) {
       
       setMonto('');
       setNota('');
-      cargarDatos(); // Recargar la lista
+      cargarDatos();
 
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -114,7 +112,6 @@ export default function PresupuestosScreen({ navigation }) {
           
           <Text style={styles.titulo}>Gestión de Ahorros</Text>
           
-          {/* --- FORMULARIO DE INGRESO --- */}
           <View style={styles.cajaPresupuesto}>
             <Text style={styles.textoIntro}>
               {modoEdicion ? 'Editando Registro' : '¡Aumenta tu saldo!'}
@@ -166,7 +163,6 @@ export default function PresupuestosScreen({ navigation }) {
             )}
           </View>
           
-          {/* --- HISTORIAL (LISTA) --- */}
           <Text style={styles.subtitulo}>Historial de Movimientos</Text>
           
           <View style={styles.listaContainer}>
@@ -177,7 +173,7 @@ export default function PresupuestosScreen({ navigation }) {
                 data={listaPresupuestos}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderItem}
-                scrollEnabled={false} // Importante porque está dentro de un ScrollView
+                scrollEnabled={false}
                 />
             )}
           </View>
@@ -195,7 +191,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(27, 40, 181, 0.4)', // Tu filtro azul
+    backgroundColor: 'rgba(27, 40, 181, 0.4)',
   },
   scrollContent: {
     paddingVertical: 40,
@@ -294,7 +290,6 @@ const styles = StyleSheet.create({
     color: '#555',
     textDecorationLine: 'underline',
   },
-  // Estilos de la Lista
   listaContainer: {
     width: '100%',
   },

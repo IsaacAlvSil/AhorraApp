@@ -1,43 +1,120 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { 
   View, Text, TextInput, TouchableOpacity, StyleSheet, 
-  ImageBackground, Alert, ScrollView 
+  ImageBackground, Alert, ScrollView, FlatList, ActivityIndicator 
 } from "react-native";
+import { useFocusEffect } from '@react-navigation/native';
+
+import { initDB } from '../database/db'; 
+
+import { TransferenciaController } from '../controllers/TransferenciaController';
 
 export default function TransferirScreen({ navigation }) {
   const [monto, setMonto] = useState("");
   const [destinatario, setDestinatario] = useState("");
   const [concepto, setConcepto] = useState("");
+  
+  const [listaTransacciones, setListaTransacciones] = useState([]);
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [idEditar, setIdEditar] = useState(null);
+  const [cargando, setCargando] = useState(true);
 
-  const handleTransferir = () => {
-    if (!monto.trim() || isNaN(parseFloat(monto)) || parseFloat(monto) <= 0) {
-      Alert.alert("Error", "Por favor ingresa un monto válido mayor a cero");
-      return;
+  useEffect(() => {
+    const iniciar = async () => {
+      try {
+        await initDB();
+      } catch (e) {
+        console.log("Error DB", e);
+      } finally {
+        setCargando(false);
+      }
+    };
+    iniciar();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      cargarDatos();
+    }, [])
+  );
+
+  const cargarDatos = async () => {
+    const datos = await TransferenciaController.obtenerLista();
+    setListaTransacciones(datos);
+  };
+
+  const handleGuardar = async () => {
+    try {
+      if (modoEdicion) {
+        await TransferenciaController.editarTransferencia(idEditar, monto, destinatario, concepto);
+        Alert.alert("Actualizado", "Transferencia modificada correctamente");
+        setModoEdicion(false);
+        setIdEditar(null);
+      } else {
+        await TransferenciaController.guardarTransferencia(monto, destinatario, concepto);
+        Alert.alert("¡Exitosa!", `Envío de $${monto} a ${destinatario} registrado.`);
+      }
+      
+      setMonto("");
+      setDestinatario("");
+      setConcepto("");
+      cargarDatos();
+
+    } catch (error) {
+      Alert.alert("Error", error.message);
     }
+  };
 
-    if (!destinatario.trim()) {
-      Alert.alert("Error", "Por favor ingresa el nombre del destinatario");
-      return;
-    }
+  const prepararEdicion = (item) => {
+    setMonto(item.monto.toString());
+    setDestinatario(item.destinatario);
+    setConcepto(item.concepto || "");
+    setIdEditar(item.id);
+    setModoEdicion(true);
+  };
 
-    const cantidad = parseFloat(monto);
-    
+  const handleEliminar = (id) => {
     Alert.alert(
-      "¡Transferencia Exitosa!",
-      `Has transferido $${cantidad.toFixed(2)} a ${destinatario}${concepto ? `\nConcepto: ${concepto}` : ''}`,
+      "Eliminar",
+      "¿Borrar esta transacción del historial?",
       [
+        { text: "Cancelar", style: "cancel" },
         { 
-          text: "Aceptar", 
-          onPress: () => {
-            setMonto("");
-            setDestinatario("");
-            setConcepto("");
-            navigation.goBack();
-          } 
+          text: "Eliminar", 
+          onPress: async () => {
+            await TransferenciaController.eliminarTransferencia(id);
+            cargarDatos();
+          }
         }
       ]
     );
   };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.itemContainer}>
+      <View style={styles.infoContainer}>
+        <Text style={styles.itemDestinatario}>Para: {item.destinatario}</Text>
+        <Text style={styles.itemMonto}>- ${item.monto.toFixed(2)}</Text>
+        {item.concepto ? <Text style={styles.itemConcepto}>{item.concepto}</Text> : null}
+      </View>
+      <View style={styles.accionesContainer}>
+        <TouchableOpacity onPress={() => prepararEdicion(item)} style={styles.btnEditar}>
+          <Text style={styles.btnTextoSm}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => handleEliminar(item.id)} style={styles.btnEliminar}>
+          <Text style={styles.btnTextoSm}>X</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+  if (cargando) {
+    return (
+      <View style={styles.centerLoading}>
+        <ActivityIndicator size="large" color="#15297c" />
+      </View>
+    );
+  }
 
   return (
     <ImageBackground
@@ -49,7 +126,9 @@ export default function TransferirScreen({ navigation }) {
           <Text style={styles.titulo}>Transferir Dinero</Text>
 
           <View style={styles.card}>
-            <Text style={styles.subtitulo}>Datos del envío</Text>
+            <Text style={styles.subtitulo}>
+              {modoEdicion ? "Editando Transferencia" : "Datos del envío"}
+            </Text>
             
             <Text style={styles.label}>Destinatario</Text>
             <TextInput
@@ -80,18 +159,45 @@ export default function TransferirScreen({ navigation }) {
             />
 
             <TouchableOpacity 
-              style={styles.botonPrincipal}
-              onPress={handleTransferir}
+              style={[styles.botonPrincipal, modoEdicion && styles.botonEditar]}
+              onPress={handleGuardar}
             >
-              <Text style={styles.botonTexto}>Realizar Transferencia</Text>
+              <Text style={styles.botonTexto}>
+                {modoEdicion ? "Actualizar Transferencia" : "Realizar Transferencia"}
+              </Text>
             </TouchableOpacity>
+
+            {modoEdicion && (
+              <TouchableOpacity onPress={() => {
+                setModoEdicion(false);
+                setMonto("");
+                setDestinatario("");
+                setConcepto("");
+                setIdEditar(null);
+              }}>
+                <Text style={styles.cancelarTexto}>Cancelar Edición</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <Text style={styles.historialTitulo}>Historial de Envíos</Text>
+          <View style={styles.listaContainer}>
+            <FlatList
+              data={listaTransacciones}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={renderItem}
+              scrollEnabled={false}
+              ListEmptyComponent={
+                <Text style={styles.emptyText}>No hay transferencias recientes.</Text>
+              }
+            />
           </View>
 
           <TouchableOpacity 
             style={styles.botonVolver} 
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.botonVolverTexto}>← Cancelar</Text>
+            <Text style={styles.botonVolverTexto}>← Regresar al Inicio</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
@@ -100,88 +206,48 @@ export default function TransferirScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  background: { 
-    flex: 1, 
-    resizeMode: "cover" 
-  },
-  overlay: { 
-    flex: 1, 
-    backgroundColor: 'rgba(21, 41, 124, 0.7)',
-  },
-  scrollContainer: {
-    alignItems: 'center',
-    paddingTop: 60,
-    paddingBottom: 40,
-    paddingHorizontal: 20
-  },
-  titulo: { 
-    fontSize: 26, 
-    fontWeight: "bold", 
-    color: "#fff", 
-    marginBottom: 25, 
-    textAlign: "center" 
-  },
+  background: { flex: 1, resizeMode: "cover" },
+  overlay: { flex: 1, backgroundColor: 'rgba(21, 41, 124, 0.7)' },
+  scrollContainer: { alignItems: 'center', paddingTop: 60, paddingBottom: 40, paddingHorizontal: 20 },
+  centerLoading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  
+  titulo: { fontSize: 26, fontWeight: "bold", color: "#fff", marginBottom: 25, textAlign: "center" },
   card: { 
-    backgroundColor: "#fff", // Tarjeta blanca
-    width: "100%", 
-    borderRadius: 25, 
-    padding: 25, 
-    marginBottom: 20, 
-    shadowColor: '#000', 
-    shadowOpacity: 0.2, 
-    shadowRadius: 5, 
-    elevation: 5 
+    backgroundColor: "#fff", width: "100%", borderRadius: 25, padding: 25, marginBottom: 20, 
+    shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 5, elevation: 5 
   },
-  subtitulo: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#15297c",
-    marginBottom: 20,
-    textAlign: 'center'
+  subtitulo: { fontSize: 18, fontWeight: "bold", color: "#15297c", marginBottom: 20, textAlign: 'center' },
+  label: { fontSize: 14, fontWeight: "600", color: "#555", marginBottom: 8, marginTop: 5 },
+  input: { 
+    width: "100%", backgroundColor: '#f5f5f5', borderRadius: 15, paddingHorizontal: 15, 
+    paddingVertical: 12, color: "#333", fontSize: 16, marginBottom: 15 
   },
-  label: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#555",
-    marginBottom: 8,
-    marginTop: 5
+  
+  botonPrincipal: { 
+    backgroundColor: "#4c7c3f", paddingVertical: 15, borderRadius: 25, alignItems: "center", 
+    marginTop: 20, shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 4, elevation: 3 
   },
-  input: {
-    width: "100%",
-    backgroundColor: '#f5f5f5', // Gris muy claro para el input
-    borderRadius: 15,
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    color: "#333",
-    fontSize: 16,
-    marginBottom: 15
+  botonEditar: { backgroundColor: "#e67e22" },
+  botonTexto: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  cancelarTexto: { color: '#c0392b', textAlign: 'center', marginTop: 15, fontWeight: 'bold' },
+
+  historialTitulo: { color: '#fff', fontSize: 20, fontWeight: 'bold', marginBottom: 15, alignSelf: 'flex-start' },
+  listaContainer: { width: '100%', marginBottom: 20 },
+  itemContainer: {
+    backgroundColor: 'rgba(255,255,255,0.9)', borderRadius: 15, padding: 15, marginBottom: 10,
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
   },
-  botonPrincipal: {
-    backgroundColor: "#4c7c3f",
-    paddingVertical: 15,
-    borderRadius: 25,
-    alignItems: "center",
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3
-  },
-  botonTexto: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold"
-  },
-  botonVolver: { 
-    paddingVertical: 15, 
-    width: '90%', 
-    alignItems: 'center', 
-    marginTop: 0 
-  },
-  botonVolverTexto: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline'
-  }
+  infoContainer: { flex: 1, marginRight: 10 },
+  itemDestinatario: { fontSize: 16, fontWeight: 'bold', color: '#15297c' },
+  itemMonto: { fontSize: 16, fontWeight: 'bold', color: '#c0392b' },
+  itemConcepto: { fontSize: 12, color: '#666', fontStyle: 'italic' },
+  
+  accionesContainer: { flexDirection: 'row', gap: 8 },
+  btnEditar: { backgroundColor: '#f39c12', padding: 8, borderRadius: 8 },
+  btnEliminar: { backgroundColor: '#c0392b', padding: 8, borderRadius: 8 },
+  btnTextoSm: { color: '#fff', fontWeight: 'bold', fontSize: 12 },
+  emptyText: { color: '#ccc', textAlign: 'center', fontStyle: 'italic' },
+
+  botonVolver: { paddingVertical: 15, width: '90%', alignItems: 'center' },
+  botonVolverTexto: { color: '#fff', fontSize: 16, fontWeight: 'bold', textDecorationLine: 'underline' }
 });

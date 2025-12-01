@@ -1,20 +1,24 @@
 import { PresupuestoModel } from '../models/PresupuestoModel';
+import { TransaccionModel } from '../models/TransaccionModel';
 
 export const PresupuestoController = {
   
-  // 1. ESTA ES LA FUNCIÓN QUE TE FALTA Y CAUSA EL ERROR
   calcularSaldoTotal: async () => {
     try {
-      const resultado = await PresupuestoModel.obtenerSaldoTotal();
-      // Si la tabla está vacía, resultado o resultado.total pueden ser null
-      return resultado?.total || 0;
+      const ingresos = await PresupuestoModel.obtenerSaldoTotal();
+      const totalIngresos = ingresos?.total || 0;
+
+      const egresos = await TransaccionModel.obtenerTotalEgresos();
+      const totalEgresos = egresos?.total || 0;
+
+      return totalIngresos - totalEgresos;
+
     } catch (error) {
-      console.error("Error calculando saldo en Controller:", error);
+      console.error("Error calculando saldo neto:", error);
       return 0;
     }
   },
 
-  // 2. Funciones existentes (CRUD)
   agregarPresupuesto: async (monto, nota) => {
     const cantidad = parseFloat(monto);
     if (isNaN(cantidad) || cantidad <= 0) {

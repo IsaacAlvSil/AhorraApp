@@ -17,7 +17,7 @@ import NotificacionesScreen from './screens/NotificacionesScreen';
 import PerfilScreen from './screens/PerfilScreen';
 import MetasScreen from './screens/MetasScreen';
 import ValidacionCredencialesScreen from './screens/ValidacionCredencialesScreen';
-import AjustesScreen from './screens/AjustesScreen'; // <--- 1. IMPORTAR LA PANTALLA
+import AjustesScreen from './screens/AjustesScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,7 +39,7 @@ function AppMainTabs() {
             iconName = focused ? 'stats-chart' : 'stats-chart-outline';
           } else if (rn === 'Presupuestos') {
             iconName = focused ? 'wallet' : 'wallet-outline';
-          } else if (rn === 'Perfil') { // Agregué el icono para perfil que faltaba en tu lógica visual
+          } else if (rn === 'Perfil') {
              iconName = focused ? 'person' : 'person-outline';
           }
 
@@ -135,8 +135,6 @@ export default function App() {
           options={{ title: 'Notificaciones' }} 
         />
 
-        {/* 2. AGREGAR LA PANTALLA AL STACK */}
-        {/* Usamos headerShown: false porque AjustesScreen ya tiene su propio Header personalizado */}
         <Stack.Screen 
           name="Ajustes" 
           component={AjustesScreen} 
