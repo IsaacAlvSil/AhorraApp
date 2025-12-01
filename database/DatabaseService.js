@@ -28,7 +28,7 @@ class DatabaseService {
     }
   }
 
-  // Obtener todos los usuarios
+
   async getAllUsuarios() {
     if (Platform.OS === 'web') {
       const data = localStorage.getItem(this.storageKey);
@@ -38,7 +38,7 @@ class DatabaseService {
     }
   }
 
-  // Buscar usuario por email y password (para login)
+
   async buscarUsuarioPorCredenciales(email, password) {
     if (Platform.OS === 'web') {
       const usuarios = await this.getAllUsuarios();
@@ -52,7 +52,6 @@ class DatabaseService {
     }
   }
 
-  // Buscar usuario solo por email (para recuperar contraseña)
   async buscarUsuarioPorEmail(email) {
     if (Platform.OS === 'web') {
       const usuarios = await this.getAllUsuarios();
@@ -66,7 +65,7 @@ class DatabaseService {
     }
   }
 
-  // Insertar nuevo usuario
+
   async addUsuario(usuarioData) {
     if (Platform.OS === 'web') {
       const usuarios = await this.getAllUsuarios();
@@ -93,5 +92,5 @@ class DatabaseService {
   }
 }
 
-// Exportar instancia de la clase
+
 export default new DatabaseService();
