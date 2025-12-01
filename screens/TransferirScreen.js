@@ -1,13 +1,7 @@
 import React, { useState } from "react";
 import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
-  ImageBackground, 
-  Alert,
-  ScrollView 
+  View, Text, TextInput, TouchableOpacity, StyleSheet, 
+  ImageBackground, Alert, ScrollView 
 } from "react-native";
 
 export default function TransferirScreen({ navigation }) {
@@ -55,13 +49,13 @@ export default function TransferirScreen({ navigation }) {
           <Text style={styles.titulo}>Transferir Dinero</Text>
 
           <View style={styles.card}>
-            <Text style={styles.subtitulo}>Enviar dinero a otra cuenta</Text>
+            <Text style={styles.subtitulo}>Datos del envío</Text>
             
             <Text style={styles.label}>Destinatario</Text>
             <TextInput
               style={styles.input}
-              placeholder="Nombre del destinatario"
-              placeholderTextColor="#777"
+              placeholder="Nombre completo"
+              placeholderTextColor="#999"
               value={destinatario}
               onChangeText={setDestinatario}
             />
@@ -70,7 +64,7 @@ export default function TransferirScreen({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="$ 0.00"
-              placeholderTextColor="#777"
+              placeholderTextColor="#999"
               value={monto}
               onChangeText={setMonto}
               keyboardType="numeric"
@@ -79,8 +73,8 @@ export default function TransferirScreen({ navigation }) {
             <Text style={styles.label}>Concepto (Opcional)</Text>
             <TextInput
               style={styles.input}
-              placeholder="Ej: Pago de servicios, Préstamo..."
-              placeholderTextColor="#777"
+              placeholder="Ej: Pago de servicios..."
+              placeholderTextColor="#999"
               value={concepto}
               onChangeText={setConcepto}
             />
@@ -97,7 +91,7 @@ export default function TransferirScreen({ navigation }) {
             style={styles.botonVolver} 
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.botonVolverTexto}>← Volver</Text>
+            <Text style={styles.botonVolverTexto}>← Cancelar</Text>
           </TouchableOpacity>
         </ScrollView>
       </View>
@@ -128,41 +122,39 @@ const styles = StyleSheet.create({
     textAlign: "center" 
   },
   card: { 
-    backgroundColor: "rgba(255, 255, 255, 0.95)", 
+    backgroundColor: "#fff", // Tarjeta blanca
     width: "100%", 
-    borderRadius: 15, 
+    borderRadius: 25, 
     padding: 25, 
     marginBottom: 20, 
     shadowColor: '#000', 
-    shadowOpacity: 0.25, 
-    shadowRadius: 4, 
+    shadowOpacity: 0.2, 
+    shadowRadius: 5, 
     elevation: 5 
   },
   subtitulo: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#15297c",
-    textAlign: "center",
-    marginBottom: 20
+    marginBottom: 20,
+    textAlign: 'center'
   },
   label: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
-    color: "#333",
+    color: "#555",
     marginBottom: 8,
-    marginTop: 10
+    marginTop: 5
   },
   input: {
     width: "100%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
+    backgroundColor: '#f5f5f5', // Gris muy claro para el input
+    borderRadius: 15,
     paddingHorizontal: 15,
     paddingVertical: 12,
-    backgroundColor: "#fff",
-    color: "#000",
+    color: "#333",
     fontSize: 16,
-    marginBottom: 5
+    marginBottom: 15
   },
   botonPrincipal: {
     backgroundColor: "#4c7c3f",
@@ -181,16 +173,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   botonVolver: { 
-    backgroundColor: '#03A9F4', 
     paddingVertical: 15, 
     width: '90%', 
-    borderRadius: 25, 
     alignItems: 'center', 
-    marginTop: 10 
+    marginTop: 0 
   },
   botonVolverTexto: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    textDecorationLine: 'underline'
   }
 });

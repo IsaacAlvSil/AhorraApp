@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, FlatList, StyleSheet,Button, ImageBackground } from "react-native";
+import { View, Text, FlatList, StyleSheet, Button, ImageBackground, TouchableOpacity } from "react-native";
 
 export default function TransaccionesScreen({setScreen}) {
   const transacciones = [
@@ -19,7 +19,7 @@ export default function TransaccionesScreen({setScreen}) {
       <Text
         style={[
           styles.monto,
-          { color: item.monto.includes("-") ? "#ff8a8a" : "#90ee90" },
+          { color: item.monto.includes("-") ? "#e53935" : "#43a047" },
         ]}
       >
         {item.monto}
@@ -29,17 +29,18 @@ export default function TransaccionesScreen({setScreen}) {
 
   return (
     <ImageBackground
-      source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYif2M6fKDGvl-Mmjd5jgZ7Bnm46zWAOZJHg&s' }}
+      source={require('../assets/fondo.png')} 
       style={styles.background}
     >
       <View style={styles.container}>
         <Text style={styles.titulo}>Historial de Transacciones</Text>
-        <Button
-          title="Siguiente Screen"
-          color="#03A9F4"
-          onPress={() => setScreen('nuevaTransaccion')}
-              />
-
+        
+        <TouchableOpacity 
+             onPress={() => setScreen('nuevaTransaccion')}
+             style={styles.actionButton}
+        >
+            <Text style={styles.actionButtonText}>+ Nueva Transacción</Text>
+        </TouchableOpacity>
 
         <View style={styles.listaContainer}>
           <FlatList
@@ -47,6 +48,7 @@ export default function TransaccionesScreen({setScreen}) {
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
             style={styles.lista}
+            showsVerticalScrollIndicator={false}
           />
         </View>
       </View>
@@ -62,7 +64,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: 'rgba(21, 41, 124, 0.7)',
     alignItems: "center",
     paddingHorizontal: 20,
     paddingTop: 60,
@@ -71,14 +73,26 @@ const styles = StyleSheet.create({
     fontSize: 26,
     fontWeight: "bold",
     color: "#fff",
-    marginBottom: 25,
+    marginBottom: 20,
     textAlign: "center",
   },
+  actionButton: {
+      backgroundColor: '#03A9F4',
+      paddingVertical: 12,
+      paddingHorizontal: 25,
+      borderRadius: 25,
+      marginBottom: 30,
+      elevation: 4,
+  },
+  actionButtonText: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 16,
+  },
   listaContainer: {
-    width: "90%",
-    backgroundColor: "rgba(255,255,255,0.2)",
-    borderRadius: 25,
-    padding: 15,
+    width: "100%",
+    flex: 1,
+    marginBottom: 20,
   },
   lista: {
     width: "100%",
@@ -86,19 +100,25 @@ const styles = StyleSheet.create({
   item: {
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "rgba(255,255,255,0.25)",
-    padding: 15,
+    alignItems: 'center',
+    backgroundColor: "#fff", // Fila blanca
+    padding: 18,
     borderRadius: 20,
-    marginBottom: 10,
+    marginBottom: 12,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   tipo: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
+    fontWeight: "bold",
+    color: "#15297c",
+    marginBottom: 4,
   },
   fecha: {
-    fontSize: 12,
-    color: "#e0e0e0",
+    fontSize: 13,
+    color: "#757575",
   },
   monto: {
     fontSize: 16,

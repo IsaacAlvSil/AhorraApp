@@ -10,12 +10,14 @@ export default function MetasScreen({ navigation }) {
 
   const renderItem = ({ item }) => {
     const progreso = item.ahorrado / item.objetivo;
-
     return (
       <View style={styles.card}>
-        <Text style={styles.cardTitulo}>{item.nombre}</Text>
+        <View style={styles.cardHeader}>
+             <Text style={styles.cardTitulo}>{item.nombre}</Text>
+             <Text style={styles.porcentaje}>{(progreso * 100).toFixed(0)}%</Text>
+        </View>
         <Text style={styles.meta}>
-          Ahorrado: ${item.ahorrado} / ${item.objetivo}
+          ${item.ahorrado} <Text style={styles.metaTotal}>/ ${item.objetivo}</Text>
         </Text>
         <View style={styles.barraFondo}>
           <View
@@ -70,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: 26, 
     fontWeight: "bold", 
     color: "#fff", 
-    marginBottom: 25, 
+    marginBottom: 30, 
     textAlign: "center" 
   },
   listaContainer: { 
@@ -78,31 +80,47 @@ const styles = StyleSheet.create({
     paddingBottom: 40 
   },
   card: { 
-    backgroundColor: "rgba(255, 255, 255, 0.9)", 
+    backgroundColor: "#fff", 
     width: "100%", 
-    borderRadius: 15, 
+    borderRadius: 20, 
     padding: 20, 
     marginBottom: 20, 
     shadowColor: '#000', 
-    shadowOpacity: 0.25, 
-    shadowRadius: 4, 
-    elevation: 5 
+    shadowOpacity: 0.1, 
+    shadowRadius: 5, 
+    elevation: 4 
+  },
+  cardHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 5,
   },
   cardTitulo: { 
     fontSize: 18, 
     fontWeight: 'bold', 
     color: '#15297c', 
-    marginBottom: 10 
+  },
+  porcentaje: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: '#4c7c3f',
   },
   meta: { 
-    fontSize: 16, 
+    fontSize: 18, 
     color: '#333', 
-    marginBottom: 10 
+    fontWeight: 'bold',
+    marginBottom: 15 
+  },
+  metaTotal: {
+      fontSize: 14,
+      color: '#888',
+      fontWeight: 'normal',
   },
   barraFondo: { 
     width: '100%', 
-    height: 15, 
-    backgroundColor: 'rgba(0,0,0,0.1)', 
+    height: 12, 
+    backgroundColor: '#eee', 
     borderRadius: 10, 
     overflow: 'hidden' 
   },
@@ -117,15 +135,12 @@ const styles = StyleSheet.create({
     width: '90%', 
     borderRadius: 25, 
     alignItems: 'center', 
-    marginTop: 10 
+    marginTop: 10,
+    marginBottom: 50,
   },
-  botonVolver: { 
-  backgroundColor: '#03A9F4', 
-  paddingVertical: 15, 
-  width: '90%', 
-  borderRadius: 25, 
-  alignItems: 'center', 
-  marginTop: 10,
-  marginBottom: 50,
-}
+  botonVolverTexto: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 16
+  }
 });

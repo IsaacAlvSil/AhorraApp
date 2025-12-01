@@ -1,12 +1,5 @@
 import React from "react";
-import { 
-  View, 
-  Text, 
-  FlatList, 
-  StyleSheet, 
-  ImageBackground, 
-  TouchableOpacity 
-} from "react-native";
+import { View, Text, FlatList, StyleSheet, ImageBackground, TouchableOpacity } from "react-native";
 
 export default function NotificacionesScreen({ navigation }) {
   const notificaciones = [
@@ -109,19 +102,19 @@ const styles = StyleSheet.create({
     paddingBottom: 40 
   },
   card: { 
-    backgroundColor: "rgba(255, 255, 255, 0.9)", 
+    backgroundColor: "#fff", // Blanco sólido
     width: "100%", 
-    borderRadius: 15, 
+    borderRadius: 20, 
     padding: 20, 
     marginBottom: 15, 
     shadowColor: '#000', 
-    shadowOpacity: 0.25, 
+    shadowOpacity: 0.1, 
     shadowRadius: 4, 
-    elevation: 5 
+    elevation: 3 
   },
   cardNoLeida: {
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    borderLeftWidth: 4,
+    backgroundColor: "#f9fcf9", // Un verde muy muy clarito
+    borderLeftWidth: 5,
     borderLeftColor: "#4c7c3f"
   },
   notificacionHeader: {
@@ -144,23 +137,26 @@ const styles = StyleSheet.create({
   },
   mensajeNotificacion: { 
     fontSize: 14, 
-    color: '#333', 
+    color: '#555', 
     marginBottom: 8,
     lineHeight: 20
   },
   fechaNotificacion: {
     fontSize: 12,
-    color: '#666',
-    fontStyle: 'italic'
+    color: '#999',
+    fontStyle: 'italic',
+    alignSelf: 'flex-end'
   },
   botonVolver: { 
-    backgroundColor: '#03A9F4', 
+    backgroundColor: 'rgba(255,255,255,0.2)', 
     paddingVertical: 15, 
     width: '90%', 
     borderRadius: 25, 
     alignItems: 'center', 
     marginTop: 10,
-    marginBottom: 30
+    marginBottom: 30,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)'
   },
   botonVolverTexto: {
     color: '#fff',
