@@ -34,13 +34,6 @@ export default function TransaccionesScreen({setScreen}) {
     >
       <View style={styles.container}>
         <Text style={styles.titulo}>Historial de Transacciones</Text>
-        <Button
-          title="Siguiente Screen"
-          color="#03A9F4"
-          onPress={() => setScreen('nuevaTransaccion')}
-              />
-
-
         <View style={styles.listaContainer}>
           <FlatList
             data={transacciones}
