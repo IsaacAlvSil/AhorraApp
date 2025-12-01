@@ -1,42 +1,36 @@
 import React from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+// 1. Importamos los iconos
+import { Ionicons } from '@expo/vector-icons'; 
 
 export default function InicioScreen({ navigation }) { 
 
-  const handleIrAInversion = () => {
-    navigation.navigate('IngresarDinero');
-  }
+  const handleIrAInversion = () => navigation.navigate('IngresarDinero');
+  const handleIrAMetas = () => navigation.navigate('MetasScreen');
+  const handleIrATransferir = () => navigation.navigate('TransferirScreen');
+  const handleIrANotificaciones = () => navigation.navigate('NotificacionesScreen');
 
-  const handleIrAMetas = () => {
-    navigation.navigate('MetasScreen');
-  }
-
-  const handleIrATransferir = () => {
-    navigation.navigate('TransferirScreen');
-  }
-  
-  const handleIrANotificaciones = () => {
-    navigation.navigate('NotificacionesScreen');
-  }
-
-  const handleCerrarSesion = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'InicioSesionScreen' }],
-    });
+  // Función para ir a la nueva pantalla de Ajustes
+  const handleIrAAjustes = () => {
+    navigation.navigate('Ajustes'); // Asegúrate de registrar esta pantalla en App.js
   }
 
   return (
     <ImageBackground
-      source={require('../assets/fondo.jpeg')}
+      source={require('../assets/fondo.png')}
       style={styles.fondo}
     >
       <View style={styles.overlay}>
-
+        
+        {/* 2. Botón de Ajustes en la esquina superior derecha */}
+        <SafeAreaView style={styles.topBar}>
+            <TouchableOpacity style={styles.btnAjustes} onPress={handleIrAAjustes}>
+                <Ionicons name="settings-outline" size={28} color="white" />
+            </TouchableOpacity>
+        </SafeAreaView>
 
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           
-
           <Text style={styles.titulo}>Inicio</Text>
           
           <View style={styles.card}>
@@ -53,31 +47,19 @@ export default function InicioScreen({ navigation }) {
           </View>
 
           <View style={styles.botonesContainer}>
-            <TouchableOpacity 
-              style={styles.botonAccion}
-              onPress={handleIrAInversion} 
-            >
+            <TouchableOpacity style={styles.botonAccion} onPress={handleIrAInversion}>
               <Text style={styles.botonTexto}>Invertir</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              style={styles.botonAccion}
-              onPress={handleIrAMetas} 
-            >
+            <TouchableOpacity style={styles.botonAccion} onPress={handleIrAMetas}>
               <Text style={styles.botonTexto}>Metas</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              style={styles.botonAccion}
-              onPress={handleIrATransferir} 
-            >
+            <TouchableOpacity style={styles.botonAccion} onPress={handleIrATransferir}>
               <Text style={styles.botonTexto}>Transferir</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity 
-              style={styles.botonAccion}
-              onPress={handleIrANotificaciones} 
-            >
+            <TouchableOpacity style={styles.botonAccion} onPress={handleIrANotificaciones}>
               <Text style={styles.botonTexto}>Notificaciones</Text>
             </TouchableOpacity>
           </View>
@@ -96,45 +78,34 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(21, 41, 124, 0.7)',
   },
-  botonCerrarSesion: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    backgroundColor: 'rgba(255, 0, 0, 0.6)',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderRadius: 20,
-    zIndex: 10,
+  // Estilos nuevos para el botón superior
+  topBar: {
+    width: '100%',
+    alignItems: 'flex-end',
+    paddingRight: 20,
+    marginTop: 10, 
   },
-  textoCerrarSesion: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 12,
+  btnAjustes: {
+    padding: 10,
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderRadius: 50,
   },
   scrollContainer: {
     alignItems: 'center',
-    paddingVertical: 40,
+    paddingBottom: 40,
     paddingHorizontal: 20,
-    marginTop: 30, 
-  },
-  logoContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  logo: {
-    width: 130,
-    height: 130,
+    // marginTop quitado para usar SafeAreaView y topBar
   },
   titulo: {
     fontSize: 28,
     color: 'white',
     fontWeight: 'bold',
     marginBottom: 25,
+    marginTop: 10,
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    width: '90%',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)', // Un poco más sólido para legibilidad
+    width: '100%',
     borderRadius: 15,
     padding: 20,
     marginBottom: 20,
@@ -168,7 +139,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    width: '90%',
+    width: '100%',
     marginBottom: 20,
   },
   botonAccion: {
@@ -181,19 +152,6 @@ const styles = StyleSheet.create({
   },
   botonTexto: {
     color: 'white',
-    fontWeight: 'bold',
-  },
-  botonVolver: {
-    backgroundColor: '#4c7c3f',
-    paddingVertical: 15,
-    width: '90%',
-    borderRadius: 25,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  botonVolverTexto: {
-    color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
   },
 });

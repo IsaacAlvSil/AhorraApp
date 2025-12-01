@@ -3,8 +3,6 @@ import {
   SafeAreaView, View, Text, TextInput, TouchableOpacity, 
   Image, ImageBackground, StyleSheet, Alert, ActivityIndicator 
 } from 'react-native';
-
-// Importa tu servicioo
 import DatabaseService from '../database/DatabaseService';
 
 export default function InicioSesionScreen({ navigation }) { 
@@ -21,17 +19,11 @@ export default function InicioSesionScreen({ navigation }) {
     setCargando(true);
 
     try {
- 
       const usuarioEncontrado = await DatabaseService.buscarUsuarioPorCredenciales(correo, contrasena);
-
       if (usuarioEncontrado) {
-  
         DatabaseService.establecerSesion(usuarioEncontrado);
-        
         Alert.alert('Bienvenido', `Hola de nuevo, ${usuarioEncontrado.nombre}`);
-        
-
-        navigation.replace('AppMainTabs'); 
+        navigation.replace('AppMainTabs');
       } else {
         Alert.alert('Error', 'Correo o contraseña incorrectos.');
       }
@@ -54,31 +46,36 @@ export default function InicioSesionScreen({ navigation }) {
         style={styles.background}
       >
         <View style={styles.container}>
-          <Image
-            source={require('../assets/lAhorra-logo.jpg')} 
-            style={styles.logo}
-            resizeMode="contain"
-          />
+          <View style={styles.logoBg}>
+            <Image
+              source={require('../assets/lAhorra-logo.jpg')} 
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
+          
           <Text style={styles.title}>INICIAR SESIÓN</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Correo electrónico"
-            placeholderTextColor="#ddd" 
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={correo}
-            onChangeText={setCorreo}
-          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Correo electrónico"
+              placeholderTextColor="#888" 
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={correo}
+              onChangeText={setCorreo}
+            />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Contraseña"
-            placeholderTextColor="#ddd"
-            secureTextEntry
-            value={contrasena}
-            onChangeText={setContrasena}
-          />
+            <TextInput
+              style={styles.input}
+              placeholder="Contraseña"
+              placeholderTextColor="#888"
+              secureTextEntry
+              value={contrasena}
+              onChangeText={setContrasena}
+            />
+          </View>
 
           <TouchableOpacity
             style={styles.button}
@@ -93,7 +90,6 @@ export default function InicioSesionScreen({ navigation }) {
             )}
           </TouchableOpacity>
 
-         
           <TouchableOpacity 
             onPress={() => navigation.navigate('RecuperarContrasena')}
             style={{ marginBottom: 20 }}
@@ -101,10 +97,12 @@ export default function InicioSesionScreen({ navigation }) {
              <Text style={styles.linkText}>¿Olvidaste tu contraseña?</Text>
           </TouchableOpacity>
       
-          <Text style={styles.textoCuenta}>¿Aun no tienes cuenta?</Text>
-          <TouchableOpacity onPress={handleRegistrar}>
-            <Text style={styles.registrar}>REGISTRARSE</Text>
-          </TouchableOpacity>
+          <View style={styles.footerContainer}>
+            <Text style={styles.textoCuenta}>¿Aun no tienes cuenta?</Text>
+            <TouchableOpacity onPress={handleRegistrar}>
+              <Text style={styles.registrar}>REGISTRARSE</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -115,49 +113,54 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     resizeMode: 'cover',
-    justifyContent: 'center',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: 'rgba(27, 40, 181, 0.4)',
+    paddingHorizontal: 25,
+    backgroundColor: 'rgba(21, 41, 124, 0.75)', // Fondo unificado
   },
-  logo: {
-    width: 250,
-    height: 100,
+  logoBg: {
+  
+    padding: 10,
+    borderRadius: 20,
     marginBottom: 30,
   },
+  logo: {
+    width: 200,
+    height: 80,
+  },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 30,
+    letterSpacing: 1,
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 10,
   },
   input: {
     width: '100%',
-    height: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    height: 55,
+    backgroundColor: '#fff', // Fondo blanco sólido
     borderRadius: 25,
     paddingHorizontal: 20,
     fontSize: 16,
-    color: '#fff',
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.5)',
+    color: '#333', // Texto oscuro
+    marginBottom: 20,
+    elevation: 3,
   },
   button: {
     width: '100%',
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#4c7c3f',
     borderRadius: 25,
-    paddingVertical: 12,
+    paddingVertical: 15,
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
     elevation: 5,
   },
   buttonText: {
@@ -166,19 +169,22 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   linkText: {
-    color: '#fff', 
-    textDecorationLine: 'underline' 
+    color: '#ddd', 
+    textDecorationLine: 'underline',
+    fontSize: 14,
+  },
+  footerContainer: {
+    alignItems: 'center',
+    marginTop: 10,
   },
   textoCuenta: {
     color: '#fff',
-    marginTop: 10,
-    fontSize: 14,
+    fontSize: 15,
   },
   registrar: {
-    color: '#03A9F4',
+    color: '#03A9F4', // Azul cyan
     fontSize: 16,
     fontWeight: 'bold',
     marginTop: 5,
-    textDecorationLine: 'underline',
   },
 });
